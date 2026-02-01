@@ -6,36 +6,29 @@ import java.io.File;
 
 import javax.imageio.ImageIO;
 
+import org.airrowe.game_player.ResourceFolder;
 import org.airrowe.game_player.image_grabbing.BasicScreenGrabber;
 import org.airrowe.game_player.image_grabbing.ImgManager;
 import org.airrowe.game_player.image_grabbing.ImgManager.ImgCategory;
 import org.airrowe.game_player.image_processing.DirectImgLocate;
 import org.airrowe.game_player.image_processing.MatchResult;
+import org.airrowe.game_player.script_runner.Viewable;
 import org.opencv.core.Mat;
 
 public class GameWindowFinder {
-	public static final String TLGW_IMG_URL = "GameWindowTopLeft.bmp";
-	public static final String BRGW_IMG_URL = "GameWindowBottomRight.bmp";
+	public static final Viewable TLGW_IMG = new Viewable(ResourceFolder.GAME_WINDOW_REF_IMGS, "GameWindowTopLeft.bmp");
+	public static final Viewable BRGW_IMG = new Viewable(ResourceFolder.GAME_WINDOW_REF_IMGS, "GameWindowBottomRight.bmp");
 	
 	private final BasicScreenGrabber bsg = BasicScreenGrabber.get(0);
 	private final DirectImgLocate dil = new DirectImgLocate();
 	private static GameWindowFinder instance;
+	
 	private Mat topLeftRefImg;
 	private Mat bottomRightRefImg;
 	
 	private GameWindowFinder(){
-		try {
-			File tlf = ImgManager.getInst().getResource(ImgCategory.GAME_WINDOW, TLGW_IMG_URL);
-			File brf = ImgManager.getInst().getResource(ImgCategory.GAME_WINDOW, BRGW_IMG_URL);
-			BufferedImage tlbi = ImageIO.read(tlf);
-			BufferedImage brbi = ImageIO.read(brf);
-			this.topLeftRefImg = ImgManager.convertToMat(tlbi);
-			this.bottomRightRefImg = ImgManager.convertToMat(brbi);
-		} catch (Exception e) {
-			System.out.println("Failed to read images");
-			e.printStackTrace(System.out);
-			// TODO: handle exception
-		}
+		this.topLeftRefImg = TLGW_IMG.getMat();
+		this.bottomRightRefImg = BRGW_IMG.getMat();
 	}
 	
 	public static GameWindowFinder get() {
@@ -49,7 +42,10 @@ public class GameWindowFinder {
 		Mat fullScreenImg = ImgManager.convertToMat(bsg.imgFullScreen());
 		MatchResult tlMatch = dil.findTemplateNormCoeff(fullScreenImg, topLeftRefImg,false);
 		MatchResult brMatch = dil.findTemplateNormCoeff(fullScreenImg, bottomRightRefImg,true);
-		
+		if(tlMatch.score < 0.8 || brMatch.score < 0.8 ) {
+			System.out.println("GAME BOX NOT VISIBLE");
+			return null;
+		}
 		return new Rectangle(
 				(int)(brMatch.location.x-tlMatch.location.x+bottomRightRefImg.width()), 
 				(int)(brMatch.location.y-tlMatch.location.y+bottomRightRefImg.height()));
@@ -73,5 +69,4 @@ public class GameWindowFinder {
 		MatchResult brMatch = dil.findTemplateNormCoeff(expectedBRImg, bottomRightRefImg,false);
 		return (tlMatch.score>=.8 && brMatch.score>=.8);
 	}
-
 }

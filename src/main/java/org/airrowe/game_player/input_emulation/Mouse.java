@@ -25,7 +25,19 @@ public class Mouse {
 	public static final int MOUSEEVENTF_WHEEL       = 0x0800;
 	public static final int MOUSEEVENTF_ABSOLUTE    = 0x8000;
 	
+	private static Mouse instance;
 	private Set<MButton> buttonDownSet = new TreeSet<MButton>();
+	
+	private Mouse() {
+		this.buttonDownSet = new TreeSet<MButton>();
+	}
+	
+	public static Mouse get() {
+		if( instance == null) {
+			instance = new Mouse();
+		}
+		return instance;
+	}
 	
 	static INPUT mouseMove(INPUT[] ins, int idx, int x, int y) {
 	    INPUT in = ins[idx];
@@ -61,8 +73,18 @@ public class Mouse {
 	    for (INPUT i : inputs) i.write();
 	    User32.INSTANCE.SendInput(new WinDef.DWORD(inputs.length), inputs, inputs[0].size());
 	}
+	public void rightClick(int x, int y) {
+	    INPUT[] inputs = (INPUT[]) new INPUT().toArray(3);
+
+	    mouseMove(inputs, 0, x, y);
+	    mouseButton(inputs, 1, MOUSEEVENTF_RIGHTDOWN);
+	    mouseButton(inputs, 2, MOUSEEVENTF_RIGHTUP);
+
+	    for (INPUT i : inputs) i.write();
+	    User32.INSTANCE.SendInput(new WinDef.DWORD(inputs.length), inputs, inputs[0].size());
+	}
 	
-	static INPUT mouseButton(INPUT[] ins, int idx, int flag) {
+	public static INPUT mouseButton(INPUT[] ins, int idx, int flag) {
 	    INPUT in = ins[idx];
 	    in.type=new WinDef.DWORD( INPUT_MOUSE );
 	    in.input.setType(MOUSEINPUT.class);
