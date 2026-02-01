@@ -18,8 +18,20 @@ public class Keyboard {
     static final int KEYEVENTF_KEYUP   = 0x0002;
     static final int KEYEVENTF_KEYDOWN   = 0x0000;
     
-    private Set<VKey> pressedKeys = new TreeSet<VKey>();
+    private static Keyboard instance;
+    private Set<VKey> pressedKeys;
 
+    private Keyboard() {
+    	this.pressedKeys = new TreeSet<VKey>();
+    }
+    
+    public static Keyboard get() {
+    	if( instance == null ) {
+    		instance = new Keyboard();
+    	}
+    	return instance;
+    }
+    
     // --- Helper ---
     //Types a string as is by injecting it.
     static INPUT keyInject(INPUT[] ins, int idx, char ch, boolean up) {
