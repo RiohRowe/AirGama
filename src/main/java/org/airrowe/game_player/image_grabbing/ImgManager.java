@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import org.airrowe.game_player.ResourceFolder;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
@@ -212,8 +213,8 @@ public class ImgManager {
 
 	    int refW = reference.cols();
 	    int refH = reference.rows();
-
-	    Path baseDir = Paths.get("src/main/resources");
+	    String wupsiesPath = ResourceFolder.WUPSIES.path;
+	    Path baseDir = Paths.get(wupsiesPath.substring(0, wupsiesPath.length()-1));
 
 	    // 1️⃣ Save reference image
 	    Imgcodecs.imwrite(
@@ -273,6 +274,19 @@ public class ImgManager {
 	    );
 	}
 	
+	public static void saveMatImgDiag(
+	        Mat source,
+	        String fileName
+	) {
+	    String wupsiesPath = ResourceFolder.WUPSIES.path;
+	    Path baseDir = Paths.get(wupsiesPath.substring(0, wupsiesPath.length()-1));
+
+	    // 1️⃣ Save reference image
+	    Imgcodecs.imwrite(
+	        baseDir.resolve(fileName+".bmp").toString(),
+	        source
+	    );
+	}
 	
 	private static class MatchPoint {
 	    int x, y;

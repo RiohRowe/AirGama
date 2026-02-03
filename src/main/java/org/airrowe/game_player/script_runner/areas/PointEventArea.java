@@ -16,7 +16,7 @@ public class PointEventArea  extends Area{
 	}
 	
 	@Override
-	protected void setParent(Area parent) {
+	public void setParent(Area parent) {
 		this.parent = null;
 	}
 	public void calcCurrentArea(Rectangle parentArea, Point eventSource) {

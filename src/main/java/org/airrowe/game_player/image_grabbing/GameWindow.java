@@ -8,6 +8,8 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.awt.Robot;
 
+import org.airrowe.game_player.image_processing.game_window.GameWindowFinder;
+
 public class GameWindow {
 	private static GameWindow instance;
 	private GraphicsDevice[] screenDevs;
@@ -45,6 +47,10 @@ public class GameWindow {
 		
 	}
 	public Rectangle getGameBox() {
+		if( !GameWindowFinder.get().gameWindowValid(gameBB)) {
+			this.gameBB = GameWindowFinder.get().getGameWindowDimensions();
+		}
+		System.out.println("Gamebox="+this.gameBB.toString());
 		return this.gameBB;
 	}
 	public Rectangle getFullScreenBox() {
@@ -61,7 +67,7 @@ public class GameWindow {
 		}
 	}
 	public int pixIdxToabsolutePos(int pixIdx, boolean height) {
-		return height ? pixIdx*65535/(this.gameBB.height - 1) : pixIdx*65535/(this.gameBB.width - 1);
+		return height ? pixIdx*65535/(this.screens[primaryScreenIdx].height - 1) : pixIdx*65535/(this.screens[primaryScreenIdx].width - 1);
 	}
 	public Robot getRobot() {
 		return this.robot;

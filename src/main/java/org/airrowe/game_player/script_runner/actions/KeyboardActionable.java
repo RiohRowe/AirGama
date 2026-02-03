@@ -13,9 +13,9 @@ public class KeyboardActionable extends Actionable{
 	private List<VKey> keys;
 
 	public KeyboardActionable(Action interactionType, String text, List<VKey> keys, Monitorable notStartIndicator,
-			Monitorable progressIndicator, Monitorable finishedIndicator, int msExpectedStart, int msExpectedEnd,
+			Monitorable progressIndicator, List<Monitorable> finishedIndicators, int msExpectedStart, int msExpectedEnd,
 			Actionable next) {
-		super(null, interactionType, notStartIndicator, progressIndicator, finishedIndicator, msExpectedStart, msExpectedEnd,
+		super(null, interactionType, notStartIndicator, progressIndicator, finishedIndicators, msExpectedStart, msExpectedEnd,
 				next);
 		this.text = text==null ? "" : text;
 		this.keys = keys==null ? new ArrayList<VKey>() : keys;

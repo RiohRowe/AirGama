@@ -1,6 +1,7 @@
 package org.airrowe.game_player.script_runner.actions;
 
 import java.awt.Point;
+import java.util.List;
 
 import org.airrowe.game_player.input_emulation.Mouse;
 import org.airrowe.game_player.script_runner.Monitorable;
@@ -10,9 +11,9 @@ public class MouseActionable extends Actionable{
 	private int scrollAmnt;
 
 	public MouseActionable(Monitorable target, Action interactionType, Integer scrollAmnt, Monitorable notStartIndicator,
-			Monitorable progressIndicator, Monitorable finishedIndicator, int msExpectedStart, int msExpectedEnd,
+			Monitorable progressIndicator, List<Monitorable> finishedIndicators, int msExpectedStart, int msExpectedEnd,
 			Actionable next) {
-		super(target, interactionType, notStartIndicator, progressIndicator, finishedIndicator, msExpectedStart, msExpectedEnd,
+		super(target, interactionType, notStartIndicator, progressIndicator, finishedIndicators, msExpectedStart, msExpectedEnd,
 				next);
 		this.scrollAmnt = scrollAmnt==null ? 0 : scrollAmnt;
 		if( !interactionType.isMouseAction()) {

@@ -1,12 +1,14 @@
 package org.airrowe.game_player.script_runner.actions;
 
+import java.util.List;
+
 import org.airrowe.game_player.script_runner.Monitorable;
 
 public class WaitActionable extends Actionable{
 	private int msWaitTime;
 
-	public WaitActionable(Action interactionType, int timeMs, Monitorable finishedIndicator, Actionable next) {
-		super(null, interactionType, null, null, finishedIndicator, 0, timeMs+100000, next);
+	public WaitActionable(Action interactionType, int timeMs, List<Monitorable> finishedIndicators, Actionable next) {
+		super(null, interactionType, null, null, finishedIndicators, 0, timeMs+100000, next);
 		this.msWaitTime = timeMs;
 		if( !interactionType.isWaitAction()) {
 //			throw new RuntimeException("INVALID action.\t"+interactionType.toString()+" is NOT a wait action." );

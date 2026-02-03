@@ -19,7 +19,7 @@ public class Area {
 	public Rectangle areaConcrete;
 	public Point center;
 	
-	Area(Rectangle areaRelativeToParent, boolean fromBottom, boolean fromRight, Area parent, List<Area> children){
+	public Area(Rectangle areaRelativeToParent, boolean fromBottom, boolean fromRight, Area parent, List<Area> children){
 		this.areaRelative = areaRelativeToParent;
 		this.fromBottom = fromBottom;
 		this.fromRight = fromRight;
@@ -27,7 +27,7 @@ public class Area {
 		this.children = children == null ? new ArrayList<Area>() : children;
 	}
 	
-	protected void setParent(Area parent) {
+	public void setParent(Area parent) {
 		this.parent = parent;
 		if( this.parent != null) {
 			this.parentArea = parent.areaConcrete;
