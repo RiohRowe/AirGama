@@ -11,6 +11,7 @@ public class GameWArea extends Area{
 	public GameWArea(Rectangle areaRelativeToParent, boolean fromBottom, boolean fromRight, List<Area> children, Rectangle gameBB){
 		super(areaRelativeToParent, fromBottom, fromRight, null, children);
 		this.parentArea = gameBB;
+		AreaManager.get().addGameWindowArea(this);
 	}
 	
 	@Override

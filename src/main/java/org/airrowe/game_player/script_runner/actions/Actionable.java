@@ -2,9 +2,13 @@ package org.airrowe.game_player.script_runner.actions;
 
 import java.util.List;
 
+import org.airrowe.game_player.diag.DiagOption;
+import org.airrowe.game_player.diag.DiagnosticsManager;
+import org.airrowe.game_player.image_grabbing.ImgManager;
 import org.airrowe.game_player.script_runner.Monitorable;
 
 public class Actionable {
+	private static int diagCount = 1;
 	private static final int DEFAULT_MONITOR_INTERVAL_MS = 300;
 	Monitorable target;
 	Monitorable notStartIndicator;
@@ -44,39 +48,46 @@ public class Actionable {
 	}
 	public boolean doActionable(){
 		//Check if action is valid
-			if(this.target == null || this.target.check()) {
-				//do action
-				this.doAction();
-			}
-			else {
-				return false;
-			}
-			//Wait for action to become monitorable
-			try {
-				Thread.sleep(msExpectedStart);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			long timerStart = System.currentTimeMillis();
-			//loop monitors
-			while( !this.hardStop && (this.finishedIndicators.size()==0 || !this.checkMonitors(finishedIndicators)) ) {
-				if( !this.hardStop && (this.progressIndicator == null || !this.progressIndicator.check()) ) {
-					if( (System.currentTimeMillis()-timerStart) > (long)this.msExpectedEnd ) {
-					   //If action failed, break and return false
-						return false;
-					}
-					try {
-						Thread.sleep(this.msMonitorInterval);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+		DiagnosticsManager dm = DiagnosticsManager.get();
+		boolean diagEnabled = dm.diagnose;
+		dm.diagnose = diagEnabled & DiagOption.TARGET_MONITORS.doDiag(dm.diagTypeFlags);
+		if(this.target == null || this.target.check()) {
+			//do action
+			this.doAction();
+		}
+		else {
+			return false;
+		}
+		//Wait for action to become monitorable
+		try {
+			Thread.sleep(msExpectedStart);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		long timerStart = System.currentTimeMillis();
+		//loop monitors
+		dm.diagnose = diagEnabled & DiagOption.FINNISHED_MONITORS.doDiag(dm.diagTypeFlags);
+		while( !this.hardStop && (this.finishedIndicators.size()==0 || !this.checkMonitors(finishedIndicators)) ) {
+			dm.diagnose = diagEnabled & DiagOption.PROGRESS_MONITORS.doDiag(dm.diagTypeFlags);
+			if( !this.hardStop && (this.progressIndicator == null || !this.progressIndicator.check()) ) {
+				if( (System.currentTimeMillis()-timerStart) > (long)this.msExpectedEnd ) {
+				   //If action failed, break and return false
+					System.out.println("ACTION timed out. MS-expEnd="+this.msExpectedEnd+"< MS-elapsedTime="+(System.currentTimeMillis()-timerStart));
+					return false;
+				}
+				try {
+					Thread.sleep(this.msMonitorInterval);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
+		}
 		// When finished, try next action
 		//TODO DO ACTION LOGIC
 		  //
+		dm.diagnose = diagEnabled;
 		if( this.nextAction == null) {
 			return true;
 		}
@@ -85,6 +96,9 @@ public class Actionable {
 	private boolean checkMonitors(List<Monitorable> monitors) {
 		for( Monitorable monitor : monitors) {
 			if (monitor.check()) {
+				System.out.println(monitor.getName());
+				ImgManager.saveMatImgDiag(monitor.getFirstRefImg(), this.diagCount+"CheckPassed");
+				this.diagCount+=1;
 				return true;
 			}
 		}
