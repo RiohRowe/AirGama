@@ -41,14 +41,16 @@ public class GameWindowFinder {
 	public Rectangle getGameWindowDimensions() {
 		Mat fullScreenImg = ImgManager.convertToMat(bsg.imgFullScreen());
 		MatchResult tlMatch = dil.findTemplateNormCoeff(fullScreenImg, topLeftRefImg,false);
-		MatchResult brMatch = dil.findTemplateNormCoeff(fullScreenImg, bottomRightRefImg,true);
+		MatchResult brMatch = dil.findTemplateNormCoeff(fullScreenImg, bottomRightRefImg,false);
 		if(tlMatch.score < 0.8 || brMatch.score < 0.8 ) {
 			System.out.println("GAME BOX NOT VISIBLE");
 			return null;
 		}
 		return new Rectangle(
+				(int)tlMatch.location.x,
+				(int)tlMatch.location.y+topLeftRefImg.height(),
 				(int)(brMatch.location.x-tlMatch.location.x+bottomRightRefImg.width()), 
-				(int)(brMatch.location.y-tlMatch.location.y+bottomRightRefImg.height()));
+				(int)(brMatch.location.y-tlMatch.location.y+bottomRightRefImg.height()-topLeftRefImg.height()));
 	}
 	
 	public boolean gameWindowValid(Rectangle gameBB) {

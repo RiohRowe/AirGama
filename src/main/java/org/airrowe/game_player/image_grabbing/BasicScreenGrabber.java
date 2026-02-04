@@ -14,7 +14,7 @@ public class BasicScreenGrabber {
 	private BasicScreenGrabber(int screenNum) {
 		gw = GameWindow.getGameWindow();
 		gw.setScreen(screenNum);
-		this.gameBB=gw.getGameBox();
+//		this.gameBB=gw.getFullScreenBox(); //Can't know the game box right away.
 		this.robot = gw.robot;
 	}
 	
@@ -35,7 +35,10 @@ public class BasicScreenGrabber {
 		return instance;
 	}
 	
-	public BufferedImage imgWindow() {
+	public BufferedImage imgGameBox() {
+		if( this.gameBB==null ) {
+			this.gameBB = gw.getGameBox();
+		}
 		return robot.createScreenCapture(this.gameBB);
 	}
 	public BufferedImage imgFullScreen() {
