@@ -1,6 +1,5 @@
 package org.airrowe.game_player.script_runner;
 
-import java.awt.Dimension;
 import java.io.IOException;
 import java.io.Serializable;
 

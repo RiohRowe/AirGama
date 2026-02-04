@@ -93,7 +93,7 @@ public class Keyboard {
 	public void KeysDown(List<VKey> keys){
 		int numInput = keys.size();
 		INPUT[] inputs = (INPUT[]) new INPUT().toArray(numInput);
-		for( int i=0,j=keys.size()-1; i<keys.size(); ++i) {
+		for( int i=0; i<keys.size(); ++i) {
 			keyPress(inputs,i,keys.get(i),false);
 			if( !this.pressedKeys.contains(keys.get(i)) ) {
 				this.pressedKeys.add(keys.get(i));
@@ -107,7 +107,7 @@ public class Keyboard {
 	public void KeysUp(List<VKey> keys){
 		int numInput = keys.size();
 		INPUT[] inputs = (INPUT[]) new INPUT().toArray(numInput);
-		for( int i=0,j=keys.size()-1; i<keys.size(); ++i) {
+		for( int i=0; i<keys.size(); ++i) {
 			keyPress(inputs,i,keys.get(i),true);
 			this.pressedKeys.remove(keys.get(i));
 		}
@@ -117,7 +117,7 @@ public class Keyboard {
         User32.INSTANCE.SendInput( new WinDef.DWORD( inputs.length ), inputs, inputs[0].size() );
 	}
 	public void releaseKeys() {
-		List<VKey> releaseList = new ArrayList();
+		List<VKey> releaseList = new ArrayList<VKey>();
 		for(VKey keyCode : this.pressedKeys) {
 			releaseList.add(keyCode);
 		}

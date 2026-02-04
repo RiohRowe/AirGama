@@ -7,7 +7,6 @@ import java.util.TreeSet;
 
 import org.airrowe.game_player.image_grabbing.GameWindow;
 
-import com.sun.jna.platform.win32.BaseTSD;
 import com.sun.jna.platform.win32.User32;
 import com.sun.jna.platform.win32.WinDef;
 import com.sun.jna.platform.win32.WinUser.INPUT;
@@ -26,6 +25,7 @@ public class Mouse {
 	public static final int MOUSEEVENTF_ABSOLUTE    = 0x8000;
 	
 	private static Mouse instance;
+	private static int defaultMousePrepositionDelay = 0;
 	private Set<MButton> buttonDownSet = new TreeSet<MButton>();
 	
 	private Mouse() {
@@ -120,5 +120,16 @@ public class Mouse {
 
 	    for (INPUT i : inputs) i.write();
 	    User32.INSTANCE.SendInput(new WinDef.DWORD(inputs.length), inputs, inputs[0].size());
+	}
+	
+	public void setDefaultActionPrepositionDelay(int delayMS) {
+		if(delayMS < 0) {
+			delayMS=0;
+		}
+		defaultMousePrepositionDelay=delayMS;
+	}
+	
+	public int getDefaultActionPrepositionDelay() {
+		return defaultMousePrepositionDelay;
 	}
 }

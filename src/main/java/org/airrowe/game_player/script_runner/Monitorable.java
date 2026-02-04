@@ -1,5 +1,7 @@
 package org.airrowe.game_player.script_runner;
 import java.awt.Point;
+import java.awt.Rectangle;
+import java.util.List;
 
 import org.airrowe.game_player.image_grabbing.BasicScreenGrabber;
 import org.airrowe.game_player.image_grabbing.ImgManager;
@@ -7,33 +9,41 @@ import org.airrowe.game_player.image_processing.DirectImgLocate;
 import org.airrowe.game_player.image_processing.MatchResult;
 import org.airrowe.game_player.input_emulation.Mouse;
 import org.airrowe.game_player.script_runner.areas.Area;
+import org.opencv.core.Mat;
 
 public class Monitorable {
 	private static final Double DEFAULT_MATCH_THRESHOLD = 0.85;
-	private DirectImgLocate dil;
 	private BasicScreenGrabber bsg;
 	private Area area;
-	private Viewable imgRef;
+	private List<Viewable> imgRefs;
 	private boolean expectMatch;
 	private double matchThreshold;
 	
-	public Monitorable( Area area, Viewable imgRef, boolean expectMatch, Double matchThreshold) {
-		this.dil = new DirectImgLocate();
+	public Monitorable( Area area, List<Viewable> imgRefs, boolean expectMatch, Double matchThreshold) {
 		this.bsg = BasicScreenGrabber.get();
 		this.area = area;
-		this.imgRef = imgRef;
+		this.imgRefs = imgRefs;
 		this.expectMatch = expectMatch;
 		this.matchThreshold = matchThreshold==null ? DEFAULT_MATCH_THRESHOLD : matchThreshold;
 	}
-	
+	public Mat getFirstRefImg() {
+		return this.imgRefs.get(0).getMat();
+	}
+	public String getName() {
+		return this.imgRefs.get(0).fileName;
+	}
 	public boolean check() {
 //		this.traceWithMouse();
-		MatchResult result = DirectImgLocate.findTemplateNormCoeff(ImgManager.convertToMat(bsg.imgTarget(this.area.areaConcrete)), imgRef.getMat(), true);
-		return ( result.score >= this.matchThreshold ) ? this.expectMatch : !this.expectMatch;
+		MatchResult result = DirectImgLocate.findTemplateNormCoeff(ImgManager.convertToMat(bsg.imgTarget(this.area.areaConcrete)), this.imgRefs, this.matchThreshold, this.expectMatch);
+		boolean pass = this.expectMatch ? result.score >= this.matchThreshold : result.score<this.matchThreshold;
+		if(pass) {
+			System.out.println("Passed with score = "+result.score);
+		}
+		return pass;
 	}
-	public boolean check(Viewable altViewable, boolean trueIfThere, Double matchThreshold) {
+	public boolean check(List<Viewable> altViewables, boolean trueIfThere, Double matchThreshold) {
 		double mt = matchThreshold==null ? this.matchThreshold : matchThreshold;
-		MatchResult result = DirectImgLocate.findTemplateNormCoeff(ImgManager.convertToMat(bsg.imgTarget(this.area.areaConcrete)), altViewable.getMat(), false);
+		MatchResult result = DirectImgLocate.findTemplateNormCoeff(ImgManager.convertToMat(bsg.imgTarget(this.area.areaConcrete)), altViewables, this.matchThreshold, this.expectMatch);
 		return ( result.score >= mt ) ? trueIfThere : !trueIfThere;
 	}
 	public Point getAreaCenter() {
@@ -55,5 +65,8 @@ public class Monitorable {
 				// TODO: handle exception
 			}
 		}
+	}
+	public Rectangle getTargetArea() {
+		return this.area.areaConcrete;
 	}
 }

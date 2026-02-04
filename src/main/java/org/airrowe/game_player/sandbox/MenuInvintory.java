@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.airrowe.game_player.script_runner.areas.Area;
+import org.airrowe.game_player.script_runner.areas.AreaManager;
 import org.airrowe.game_player.script_runner.areas.GameWArea;
 
 public class MenuInvintory {
@@ -57,8 +58,7 @@ public class MenuInvintory {
 				true,
 				this.menuItemAreas,
 				gameBB);
-		this.invinArea.calcCurrentArea(gameBB);
-		this.menuArea.calcCurrentArea(gameBB);
+		AreaManager.get().initializeGameWindowAreas(gameBB);
 	}
 	public Area getInvinArea() {
 		return this.invinArea;

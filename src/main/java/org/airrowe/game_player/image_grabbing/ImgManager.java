@@ -14,6 +14,8 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.airrowe.game_player.ResourceFolder;
+import org.airrowe.game_player.diag.DiagOption;
+import org.airrowe.game_player.diag.DiagnosticsManager;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
@@ -210,18 +212,19 @@ public class ImgManager {
 	        Mat result,
 	        Point expectedMatch
 	) {
-
+		DiagnosticsManager dm = DiagnosticsManager.get();
 	    int refW = reference.cols();
 	    int refH = reference.rows();
 	    String wupsiesPath = ResourceFolder.WUPSIES.path;
 	    Path baseDir = Paths.get(wupsiesPath.substring(0, wupsiesPath.length()-1));
 
 	    // 1️⃣ Save reference image
-	    Imgcodecs.imwrite(
-	        baseDir.resolve("REFERENCE.bmp").toString(),
-	        reference
-	    );
-
+	    if( DiagOption.REFERENCE_IMG.doDiag(dm.diagTypeFlags)) {
+		    Imgcodecs.imwrite(
+		        baseDir.resolve(dm.numDiags+"-REFERENCE.bmp").toString(),
+		        reference
+		    );
+	    }
 	    // 2️⃣ Collect all match scores with coordinates
 	    List<MatchPoint> points = new ArrayList<>();
 
@@ -238,40 +241,45 @@ public class ImgManager {
 	    // 🔴 If using TM_SQDIFF / TM_SQDIFF_NORMED, use this instead:
 	    // points.sort(Comparator.comparingDouble(MatchPoint::score));
 
-	    // 4️⃣ Save best 3
-	    saveSamples("BEST", points.subList(0, 3), source, refW, refH, baseDir);
-
+	    if( DiagOption.BEST3MATCH.doDiag(dm.diagTypeFlags)) {
+		    // 4️⃣ Save best 3
+		    saveSamples(dm.numDiags+"-BEST", points.subList(0, 3), source, refW, refH, baseDir);
+	    }
+	    if( DiagOption.WORST3MATCH.doDiag(dm.diagTypeFlags)) {
 	    // 5️⃣ Save worst 3
-	    saveSamples(
-	        "WORST",
-	        points.subList(points.size() - 3, points.size()),
-	        source,
-	        refW,
-	        refH,
-	        baseDir
-	    );
-
-	    // 6️⃣ Save expected match
-	    double expectedScore = result.get(
-	        (int) expectedMatch.y,
-	        (int) expectedMatch.x
-	    )[0];
-
-	    saveCrop(
-	        source,
-	        refW,
-	        refH,
-	        (int) expectedMatch.x,
-	        (int) expectedMatch.y,
-	        baseDir.resolve(
-	            String.format(
-	                "EXPECTED_x%d_y%d_score%.5f.bmp",
-	                (int) expectedMatch.x,
-	                (int) expectedMatch.y,
-	                expectedScore
-	            )
-	        ).toString()
-	    );
+		    saveSamples(
+		    		dm.numDiags+"WORST",
+		        points.subList(points.size() - 3, points.size()),
+		        source,
+		        refW,
+		        refH,
+		        baseDir
+		    );
+	    }
+	    
+	    if( DiagOption.EXPECTED_MATCH_LOC.doDiag(dm.diagTypeFlags)) {
+		    // 6️⃣ Save expected match
+		    double expectedScore = result.get(
+		        (int) expectedMatch.y,
+		        (int) expectedMatch.x
+		    )[0];
+	
+		    saveCrop(
+		        source,
+		        refW,
+		        refH,
+		        (int) expectedMatch.x,
+		        (int) expectedMatch.y,
+		        baseDir.resolve(
+		            String.format(
+		            	 dm.numDiags+"-EXPECTED_x%d_y%d_score%.5f.bmp",
+		                (int) expectedMatch.x,
+		                (int) expectedMatch.y,
+		                expectedScore
+		            )
+		        ).toString()
+		    );
+	    }
 	}
 	
 	public static void saveMatImgDiag(
