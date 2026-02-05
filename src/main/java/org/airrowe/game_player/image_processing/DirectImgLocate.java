@@ -41,7 +41,7 @@ public class DirectImgLocate {
 		    Core.MinMaxLocResult mmr = Core.minMaxLoc(result);
 		    //If match found, finish
 		    if( matchResult == null || matchResult.score < mmr.maxVal) {
-		    	matchResult = new MatchResult(mmr.maxLoc, mmr.maxVal);
+		    	matchResult = new MatchResult(mmr.maxLoc,template,mmr.maxVal);
 		    	if( matchResult.score >= matchThreshold) {
 		    		break;
 		    	}

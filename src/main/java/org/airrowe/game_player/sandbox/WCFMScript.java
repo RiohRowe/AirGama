@@ -292,7 +292,7 @@ public class WCFMScript {
 		}
 		Sound.BELL.play();
 		//If fire, feed fire, else build fire
-
+		DiagnosticsManager.get().diagnose=true;
 		System.out.println((System.currentTimeMillis()-startTimeMs)+":Check if fire exists");
 		if( !this.fire.check() ) {
 			//Walk to position 2
@@ -308,10 +308,9 @@ public class WCFMScript {
 				return false;
 			}
 		}
+		DiagnosticsManager.get().diagnose=false;
 		// add logs fire
 		System.out.println((System.currentTimeMillis()-startTimeMs)+":click willow logs to add to fire");
-		DiagnosticsManager.get().diagnose=true;
-		System.out.println((System.currentTimeMillis()-startTimeMs)+":click fire");
 		if( !this.clickWillowLogsAddFire.doActionable() ) {
 			System.out.println("Couldn't click logs to add to fire!");
 			return false;
@@ -332,7 +331,6 @@ public class WCFMScript {
 		}
 			
 		//Check all logs are gone
-		DiagnosticsManager.get().diagnose=false;
 		Sound.BELL.play();
 		System.out.println((System.currentTimeMillis()-startTimeMs)+":LOOP FINISHED");
 		return true;

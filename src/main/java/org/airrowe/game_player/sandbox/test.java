@@ -15,15 +15,15 @@ public class test {
 //		dm.diagnose = true;
 		dm.diagTypeFlags = 0
 //				| DiagOption.REFERENCE_IMG.bitRep
-//				| DiagOption.BEST3MATCH.bitRep
+				| DiagOption.BEST3MATCH.bitRep
 //				| DiagOption.WORST3MATCH.bitRep
 //				| DiagOption.EXPECTED_MATCH_LOC.bitRep
 				| DiagOption.SEARCH_AREA.bitRep
 //				| DiagOption.MATCH_SPACE_HEAT_MAP.bitRep
 				
-				| DiagOption.TARGET_MONITORS.bitRep
+				| DiagOption.TARGET_MONITORS.bitRep;
 //				| DiagOption.PROGRESS_MONITORS.bitRep
-				| DiagOption.FINNISHED_MONITORS.bitRep;
+//				| DiagOption.FINNISHED_MONITORS.bitRep;
 		dm.setNumDiags(20);
 		System.out.println("WAITING");
 		for( int i=5; i>=0; --i) {

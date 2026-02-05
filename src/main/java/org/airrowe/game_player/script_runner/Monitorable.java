@@ -40,8 +40,8 @@ public class Monitorable {
 		boolean pass = this.expectMatch ? result.score >= this.matchThreshold : result.score<this.matchThreshold;
 		if(result.score > this.matchThreshold) {
 			this.lastPoint = new Point(
-					this.area.areaConcrete.x+(int)result.location.x,
-					this.area.areaConcrete.y+(int)result.location.y);
+					this.area.areaConcrete.x+result.locationC.x,
+					this.area.areaConcrete.y+result.locationC.y);
 //			System.out.println("Passed with score = "+result.score);
 		}
 		return pass;
@@ -51,8 +51,8 @@ public class Monitorable {
 		MatchResult result = DirectImgLocate.findTemplateNormCoeff(ImgManager.convertToMat(bsg.imgTarget(this.area.areaConcrete)), altViewables, this.matchThreshold, this.expectMatch);		boolean pass = this.expectMatch ? result.score >= this.matchThreshold : result.score<this.matchThreshold;
 		if(result.score > this.matchThreshold) {
 			this.lastPoint = new Point(
-					this.area.areaConcrete.x+(int)result.location.x,
-					this.area.areaConcrete.y+(int)result.location.y);
+					this.area.areaConcrete.x+result.locationC.x,
+					this.area.areaConcrete.y+result.locationC.y);
 //			System.out.println("Passed with score = "+result.score);
 		}
 		return pass;

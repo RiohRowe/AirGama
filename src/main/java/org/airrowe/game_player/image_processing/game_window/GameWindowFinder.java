@@ -41,10 +41,10 @@ public class GameWindowFinder {
 			return null;
 		}
 		return new Rectangle(
-				(int)tlMatch.location.x,
-				(int)tlMatch.location.y+topLeftRefImg.height(),
-				(int)(brMatch.location.x-tlMatch.location.x+bottomRightRefImg.width()), 
-				(int)(brMatch.location.y-tlMatch.location.y+bottomRightRefImg.height()-topLeftRefImg.height()));
+				(int)tlMatch.locationTL.x,
+				(int)tlMatch.locationTL.y+topLeftRefImg.height(),
+				(int)(brMatch.locationTL.x-tlMatch.locationTL.x+bottomRightRefImg.width()), 
+				(int)(brMatch.locationTL.y-tlMatch.locationTL.y+bottomRightRefImg.height()-topLeftRefImg.height()));
 	}
 	
 	public boolean gameWindowValid(Rectangle gameBB) {
