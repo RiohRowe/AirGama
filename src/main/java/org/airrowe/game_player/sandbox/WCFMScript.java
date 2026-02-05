@@ -61,7 +61,9 @@ public class WCFMScript {
 		GameWArea fireGA = new GameWArea(new Rectangle(669,351,25,23),false,false,null,gameBB);
 		this.fire = new Monitorable(
 				fireGA,
-				List.of(new Viewable(ResourceFolder.GAME_WORLD_REF_IMGS, "Pos1Fire.bmp")),
+				List.of(new Viewable(ResourceFolder.GAME_WORLD_REF_IMGS, "Pos1Fire1.bmp"),
+						new Viewable(ResourceFolder.GAME_WORLD_REF_IMGS, "Pos1Fire2.bmp"),
+						new Viewable(ResourceFolder.GAME_WORLD_REF_IMGS, "Pos1Fire3.bmp")),
 				true,
 				null);
 		GameWArea pos1IndGA = new GameWArea(new Rectangle(737,346,25,25),false,false,null,gameBB);
@@ -117,13 +119,14 @@ public class WCFMScript {
 				1000,
 				120000,
 				null,
-				300);
+				null);
 		GameWArea tree2Area = new GameWArea(new Rectangle(640,366,27,26),false,false,null,gameBB);
 		List<Viewable> tree2ImgRefs = List.of(new Viewable(ResourceFolder.GAME_WORLD_REF_IMGS, "1Pos1Tree2.bmp"),
 				new Viewable(ResourceFolder.GAME_WORLD_REF_IMGS, "2Pos1Tree2.bmp"),
 				new Viewable(ResourceFolder.GAME_WORLD_REF_IMGS, "3Pos1Tree2.bmp"),
 				new Viewable(ResourceFolder.GAME_WORLD_REF_IMGS, "4Pos1Tree2.bmp"),
-				new Viewable(ResourceFolder.GAME_WORLD_REF_IMGS, "5Pos1Tree2.bmp"));
+				new Viewable(ResourceFolder.GAME_WORLD_REF_IMGS, "5Pos1Tree2.bmp"),
+				new Viewable(ResourceFolder.GAME_WORLD_REF_IMGS, "6Pos1Tree2.bmp"));
 		this.tree2 = new MouseActionable(
 				new Monitorable(
 						tree2Area,
@@ -144,7 +147,7 @@ public class WCFMScript {
 				1000,
 				120000,
 				null,
-				1000);
+				null);
 		
 		this.moveToPos2 = new MouseActionable(
 				new Monitorable(

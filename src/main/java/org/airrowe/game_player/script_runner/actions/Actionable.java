@@ -9,7 +9,7 @@ import org.airrowe.game_player.script_runner.Monitorable;
 
 public class Actionable {
 	private static int diagCount = 1;
-	private static final int DEFAULT_MONITOR_INTERVAL_MS = 300;
+	private static final int DEFAULT_MONITOR_INTERVAL_MS = 100;
 	Monitorable target;
 	Monitorable notStartIndicator;
 	Monitorable progressIndicator;
