@@ -18,6 +18,7 @@ public class Monitorable {
 	private List<Viewable> imgRefs;
 	private boolean expectMatch;
 	private double matchThreshold;
+	private Point lastPoint;
 	
 	public Monitorable( Area area, List<Viewable> imgRefs, boolean expectMatch, Double matchThreshold) {
 		this.bsg = BasicScreenGrabber.get();
@@ -25,6 +26,7 @@ public class Monitorable {
 		this.imgRefs = imgRefs;
 		this.expectMatch = expectMatch;
 		this.matchThreshold = matchThreshold==null ? DEFAULT_MATCH_THRESHOLD : matchThreshold;
+		this.lastPoint = this.area.center;
 	}
 	public Mat getFirstRefImg() {
 		return this.imgRefs.get(0).getMat();
@@ -37,17 +39,25 @@ public class Monitorable {
 		MatchResult result = DirectImgLocate.findTemplateNormCoeff(ImgManager.convertToMat(bsg.imgTarget(this.area.areaConcrete)), this.imgRefs, this.matchThreshold, this.expectMatch);
 		boolean pass = this.expectMatch ? result.score >= this.matchThreshold : result.score<this.matchThreshold;
 		if(pass) {
-			System.out.println("Passed with score = "+result.score);
+			this.lastPoint = new Point((int)result.location.x,(int)result.location.y);
+//			System.out.println("Passed with score = "+result.score);
 		}
 		return pass;
 	}
 	public boolean check(List<Viewable> altViewables, boolean trueIfThere, Double matchThreshold) {
 		double mt = matchThreshold==null ? this.matchThreshold : matchThreshold;
-		MatchResult result = DirectImgLocate.findTemplateNormCoeff(ImgManager.convertToMat(bsg.imgTarget(this.area.areaConcrete)), altViewables, this.matchThreshold, this.expectMatch);
-		return ( result.score >= mt ) ? trueIfThere : !trueIfThere;
+		MatchResult result = DirectImgLocate.findTemplateNormCoeff(ImgManager.convertToMat(bsg.imgTarget(this.area.areaConcrete)), altViewables, this.matchThreshold, this.expectMatch);		boolean pass = this.expectMatch ? result.score >= this.matchThreshold : result.score<this.matchThreshold;
+		if(pass) {
+			this.lastPoint = new Point((int)result.location.x,(int)result.location.y);
+//			System.out.println("Passed with score = "+result.score);
+		}
+		return pass;
 	}
 	public Point getAreaCenter() {
 		return area.center;
+	}
+	public Point getLastFoundCenter() {
+		return this.lastPoint;
 	}
 	public void traceWithMouse() {
 		for(int i=0; i<5; ++i) {

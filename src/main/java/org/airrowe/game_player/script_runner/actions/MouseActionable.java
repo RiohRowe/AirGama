@@ -53,7 +53,7 @@ public class MouseActionable extends Actionable{
 	@Override
 	protected void doAction() {
 		//GetTarget
-		Point targetPoint = this.target.getAreaCenter();
+		Point targetPoint = this.target.getLastFoundCenter();
 		//PrepositionMouseAndDelay
 		//Perform MouseAction -> targetCenter.
 		switch( interactionType ) {
