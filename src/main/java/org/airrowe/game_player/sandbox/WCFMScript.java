@@ -15,6 +15,7 @@ import org.airrowe.game_player.script_runner.Monitorable;
 import org.airrowe.game_player.script_runner.Viewable;
 import org.airrowe.game_player.script_runner.actions.Action;
 import org.airrowe.game_player.script_runner.actions.MouseActionable;
+import org.airrowe.game_player.script_runner.actions.WaitActionable;
 import org.airrowe.game_player.script_runner.areas.Area;
 import org.airrowe.game_player.script_runner.areas.AreaManager;
 import org.airrowe.game_player.script_runner.areas.GameWArea;
@@ -38,6 +39,7 @@ public class WCFMScript {
 	private Monitorable confirmBurnButton;
 	private List<Monitorable> emptyInvinSlots;
 	private Monitorable invinFilledWithLogs;
+	private WaitActionable waitForLastLogToBurn;
 
 	WCFMScript(){
 
@@ -74,7 +76,7 @@ public class WCFMScript {
 				List.of(new Viewable(ResourceFolder.GAME_WORLD_REF_IMGS, "Pos2Ind.bmp")),
 				true,
 				null);
-		GameWArea confirmBurnButtonGA = new GameWArea(new Rectangle(236,68,40,32),true,false,null,gameBB);
+		GameWArea confirmBurnButtonGA = new GameWArea(new Rectangle(236,91,40,32),true,false,null,gameBB);
 		this.confirmBurnButton = new Monitorable(
 				confirmBurnButtonGA,
 				List.of(new Viewable(ResourceFolder.GAME_WORLD_REF_IMGS, "confirmBurnButton.bmp")),
@@ -235,9 +237,10 @@ public class WCFMScript {
 				null,
 				List.of(this.emptyInvinSlots.get(26)),
 				130000,
-				140000,
+				150000,
 				null,
 				null);
+		this.waitForLastLogToBurn = new WaitActionable(Action.WAIT, 20000, List.of(this.emptyInvinSlots.get(27)), null);
 		AreaManager.get().initializeGameWindowAreas(gameBB);
 //		ImgManager.saveMatImgDiag(ImgManager.convertToMat(BasicScreenGrabber.get().imgTarget(gameBB)), "GAME_BOUNDING_BOX");
 	}
@@ -252,6 +255,8 @@ public class WCFMScript {
 		monitor.traceWithMouse();
 	}
 	public boolean scriptLoop() {
+		Long startTimeMs = System.currentTimeMillis();
+		System.out.println((System.currentTimeMillis()-startTimeMs)+":LoopStart");
 		//While inventory is not full, chop trees
 		int lastLogOrEmptySlotIdx = 27;
 		Monitorable lastEmpty = this.emptyInvinSlots.get(lastLogOrEmptySlotIdx);
@@ -268,10 +273,12 @@ public class WCFMScript {
 			}
 //			DiagnosticsManager.get().diagnose=true;
 			//TryChop Tree1
+			System.out.println((System.currentTimeMillis()-startTimeMs)+":Try cut tree1");
 			if( !this.tree1.doActionable() ) {
 				System.out.println("Can't chop Tree1");
 			}
 			//TryChop Tree2
+			System.out.println((System.currentTimeMillis()-startTimeMs)+":Try cut tree2");
 			if( !this.tree2.doActionable() ) {
 				System.out.println("Can't chop Tree2");
 			}
@@ -281,35 +288,49 @@ public class WCFMScript {
 		}
 		Sound.BELL.play();
 		//If fire, feed fire, else build fire
+
+		System.out.println((System.currentTimeMillis()-startTimeMs)+":Check if fire exists");
 		if( !this.fire.check() ) {
 			//Walk to position 2
+			System.out.println((System.currentTimeMillis()-startTimeMs)+":Walk to pos 2");
 			if(!this.moveToPos2.doActionable()) {
 				System.out.println("Couldn't move to spot 2.");
 				return false;
 			}
 			//StartFire
+			System.out.println((System.currentTimeMillis()-startTimeMs)+":click willow logs,click Tinderbox,moveTopos1");
 			if( !this.clickWillowLogsLightFire.doActionable() || !this.lightFireTinderBox.doActionable()) {
 				System.out.println("Couldn't light fire");
 				return false;
 			}
-			Sound.BELL.play();
 		}
 		// add logs fire
+		System.out.println((System.currentTimeMillis()-startTimeMs)+":click willow logs to add to fire");
 		DiagnosticsManager.get().diagnose=true;
+		System.out.println((System.currentTimeMillis()-startTimeMs)+":click fire");
 		if( !this.clickWillowLogsAddFire.doActionable() ) {
 			System.out.println("Couldn't click logs to add to fire!");
 			return false;
 		}
+		System.out.println((System.currentTimeMillis()-startTimeMs)+":click on fire to add logs");
 		if( !this.clickFireAddLogs.doActionable() ) {
 			System.out.println("Couldn't click fire to add logs!");
 			return false;
 		}
+		System.out.println((System.currentTimeMillis()-startTimeMs)+":confirm add logs");
 		if( !this.confirmAddWillowLogsFire.doActionable() ) {
 			System.out.println("Couldn't click confirm to add logs to fire!");
 			return false;
 		}
+		if( !this.waitForLastLogToBurn.doActionable() ) {
+			System.out.println("Failed to wait for log to burn!");
+			return false;
+		}
+			
+		//Check all logs are gone
 		DiagnosticsManager.get().diagnose=false;
 		Sound.BELL.play();
+		System.out.println((System.currentTimeMillis()-startTimeMs)+":LOOP FINISHED");
 		return true;
 	}
 	

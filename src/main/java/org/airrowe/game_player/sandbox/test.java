@@ -43,8 +43,8 @@ public class test {
 		Sound.BELL.play();
 		System.out.println("BUILDING");
 		WCFMScript script = new WCFMScript();
-		script.testArea();
-//		script.doLoop(100);
+//		script.testArea();
+		script.doLoop(100);
 		
 	}
 }

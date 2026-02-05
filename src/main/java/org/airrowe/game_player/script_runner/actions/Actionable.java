@@ -96,9 +96,9 @@ public class Actionable {
 	private boolean checkMonitors(List<Monitorable> monitors) {
 		for( Monitorable monitor : monitors) {
 			if (monitor.check()) {
-				System.out.println(monitor.getName());
-				ImgManager.saveMatImgDiag(monitor.getFirstRefImg(), this.diagCount+"CheckPassed");
-				this.diagCount+=1;
+//				System.out.println(monitor.getName());
+//				ImgManager.saveMatImgDiag(monitor.getFirstRefImg(), this.diagCount+"CheckPassed");
+//				this.diagCount+=1;
 				return true;
 			}
 		}
