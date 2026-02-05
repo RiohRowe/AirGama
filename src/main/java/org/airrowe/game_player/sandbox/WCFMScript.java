@@ -58,7 +58,8 @@ public class WCFMScript {
 				true,
 				null));
 		}
-		GameWArea fireGA = new GameWArea(new Rectangle(669,351,25,23),false,false,null,gameBB);
+		GameWArea fireGA = new GameWArea(new Rectangle(666,344,25,25),false,false,null,gameBB);
+		AreaManager.get().initializeGameWindowAreas(gameBB);
 		this.fire = new Monitorable(
 				fireGA,
 				List.of(new Viewable(ResourceFolder.GAME_WORLD_REF_IMGS, "Pos1Fire1.bmp"),
@@ -152,7 +153,7 @@ public class WCFMScript {
 		this.moveToPos2 = new MouseActionable(
 				new Monitorable(
 					fireGA,
-					List.of(new Viewable(ResourceFolder.GAME_WORLD_REF_IMGS, "Pos1Fire.bmp")),
+					List.of(new Viewable(ResourceFolder.GAME_WORLD_REF_IMGS, "Pos1Fire1.bmp")),
 					false,
 					null),
 				Action.MOUSE_LEFT_CLICK,
@@ -250,7 +251,7 @@ public class WCFMScript {
 	public void testArea() {
 //		new Monitorable(new Area( new Rectangle(1138,431,228,297),false,false,),tinderBox,false,null).traceWithMouse();
 //		new Monitorable(this.menuInvin.getInvinArea(), List.of(tinderBox), false, null).traceWithMouse();
-		diagMonitor(this.confirmBurnButton);
+		diagMonitor(this.fire);
 	}//java.awt.Point[x=1138,y=431]
 	public void diagMonitor(Monitorable monitor) {
 		ImgManager.saveMatImgDiag(ImgManager.convertToMat(BasicScreenGrabber.get().imgTarget(monitor.getTargetArea())), "TEST_AREA_IMG");
