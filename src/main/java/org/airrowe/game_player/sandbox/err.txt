@@ -1,3 +1,500 @@
 WAITING
 5
+soundPlay
 4
+soundPlay
+3
+soundPlay
+2
+soundPlay
+1
+soundPlay
+0
+soundPlay
+soundPlay
+BUILDING
+Gamebox=java.awt.Rectangle[x=0,y=23,width=1366,height=705]
+0:LoopStart
+37:Try cut tree1
+soundPlay
+10040:Try cut tree2
+soundPlay
+soundPlay
+22652:Check if fire exists
+DUMPING DIAG-20
+INVIN_IDX:2
+22717:click on willow logs to add to fire
+soundPlay
+23220:click on fire to add logs
+soundPlay
+24320:confirm Add to fire.
+soundPlay
+INVIN_IDX:3
+24771:click on willow logs to add to fire
+soundPlay
+27653:click on fire to add logs
+soundPlay
+28536:confirm Add to fire.
+soundPlay
+INVIN_IDX:4
+28954:click on willow logs to add to fire
+soundPlay
+31787:click on fire to add logs
+soundPlay
+32769:confirm Add to fire.
+soundPlay
+INVIN_IDX:5
+33204:click on willow logs to add to fire
+soundPlay
+36721:click on fire to add logs
+soundPlay
+37554:confirm Add to fire.
+soundPlay
+INVIN_IDX:6
+37971:click on willow logs to add to fire
+soundPlay
+41403:click on fire to add logs
+soundPlay
+42319:confirm Add to fire.
+soundPlay
+INVIN_IDX:7
+42754:click on willow logs to add to fire
+soundPlay
+45687:click on fire to add logs
+soundPlay
+46554:confirm Add to fire.
+soundPlay
+INVIN_IDX:8
+46972:click on willow logs to add to fire
+soundPlay
+49885:click on fire to add logs
+soundPlay
+50719:confirm Add to fire.
+soundPlay
+INVIN_IDX:9
+51137:click on willow logs to add to fire
+soundPlay
+54703:click on fire to add logs
+soundPlay
+55586:confirm Add to fire.
+soundPlay
+INVIN_IDX:10
+56004:click on willow logs to add to fire
+soundPlay
+59453:click on fire to add logs
+soundPlay
+60303:confirm Add to fire.
+soundPlay
+INVIN_IDX:11
+60737:click on willow logs to add to fire
+soundPlay
+64270:click on fire to add logs
+soundPlay
+65169:confirm Add to fire.
+soundPlay
+INVIN_IDX:12
+65587:click on willow logs to add to fire
+soundPlay
+69054:click on fire to add logs
+soundPlay
+69918:confirm Add to fire.
+soundPlay
+INVIN_IDX:13
+70372:click on willow logs to add to fire
+soundPlay
+73255:click on fire to add logs
+soundPlay
+74119:confirm Add to fire.
+soundPlay
+INVIN_IDX:14
+74553:click on willow logs to add to fire
+soundPlay
+77486:click on fire to add logs
+soundPlay
+78388:confirm Add to fire.
+soundPlay
+INVIN_IDX:15
+78821:click on willow logs to add to fire
+soundPlay
+82302:click on fire to add logs
+soundPlay
+83153:confirm Add to fire.
+soundPlay
+INVIN_IDX:16
+83571:click on willow logs to add to fire
+soundPlay
+86470:click on fire to add logs
+soundPlay
+87386:confirm Add to fire.
+soundPlay
+INVIN_IDX:17
+87820:click on willow logs to add to fire
+soundPlay
+91303:click on fire to add logs
+soundPlay
+92171:confirm Add to fire.
+soundPlay
+INVIN_IDX:18
+92622:click on willow logs to add to fire
+soundPlay
+96004:click on fire to add logs
+soundPlay
+96936:confirm Add to fire.
+soundPlay
+INVIN_IDX:19
+97371:click on willow logs to add to fire
+soundPlay
+100204:click on fire to add logs
+soundPlay
+101188:confirm Add to fire.
+soundPlay
+INVIN_IDX:20
+101588:click on willow logs to add to fire
+soundPlay
+104404:click on fire to add logs
+soundPlay
+105388:confirm Add to fire.
+soundPlay
+INVIN_IDX:21
+105787:click on willow logs to add to fire
+soundPlay
+108586:click on fire to add logs
+soundPlay
+109553:confirm Add to fire.
+soundPlay
+INVIN_IDX:22
+109988:click on willow logs to add to fire
+soundPlay
+112769:click on fire to add logs
+soundPlay
+113736:confirm Add to fire.
+soundPlay
+INVIN_IDX:23
+114152:click on willow logs to add to fire
+soundPlay
+116969:click on fire to add logs
+soundPlay
+117970:confirm Add to fire.
+soundPlay
+INVIN_IDX:24
+118404:click on willow logs to add to fire
+soundPlay
+121820:click on fire to add logs
+soundPlay
+122768:confirm Add to fire.
+soundPlay
+INVIN_IDX:25
+123188:click on willow logs to add to fire
+soundPlay
+126053:click on fire to add logs
+soundPlay
+126953:confirm Add to fire.
+soundPlay
+INVIN_IDX:26
+127388:click on willow logs to add to fire
+soundPlay
+130170:click on fire to add logs
+soundPlay
+131186:confirm Add to fire.
+soundPlay
+INVIN_IDX:27
+131638:click on willow logs to add to fire
+soundPlay
+134986:click on fire to add logs
+soundPlay
+ACTION timed out. MS-expEnd=10000< MS-elapsedTime=10001
+Couldn't click fire to add logs!
+145770:Wait for last log to finish.
+WAITING...
+soundPlay
+145786:LOOP FINISHED
+0:LoopStart
+35:Try cut tree1
+soundPlay
+38953:Try cut tree2
+soundPlay
+56333:Try cut tree1
+soundPlay
+84401:Try cut tree2
+soundPlay
+126666:Try cut tree1
+soundPlay
+136683:Try cut tree2
+soundPlay
+soundPlay
+147016:Check if fire exists
+DUMPING DIAG-19
+INVIN_IDX:2
+147043:click on willow logs to add to fire
+soundPlay
+147500:click on fire to add logs
+soundPlay
+148566:confirm Add to fire.
+soundPlay
+INVIN_IDX:3
+149001:click on willow logs to add to fire
+soundPlay
+151900:click on fire to add logs
+soundPlay
+152816:confirm Add to fire.
+soundPlay
+INVIN_IDX:4
+153251:click on willow logs to add to fire
+soundPlay
+156652:click on fire to add logs
+soundPlay
+157599:confirm Add to fire.
+soundPlay
+INVIN_IDX:5
+158018:click on willow logs to add to fire
+soundPlay
+161550:click on fire to add logs
+soundPlay
+162433:confirm Add to fire.
+soundPlay
+INVIN_IDX:6
+162867:click on willow logs to add to fire
+soundPlay
+166316:click on fire to add logs
+soundPlay
+167201:confirm Add to fire.
+soundPlay
+INVIN_IDX:7
+167634:click on willow logs to add to fire
+soundPlay
+170517:click on fire to add logs
+soundPlay
+171383:confirm Add to fire.
+soundPlay
+INVIN_IDX:8
+171834:click on willow logs to add to fire
+soundPlay
+174733:click on fire to add logs
+soundPlay
+175617:confirm Add to fire.
+soundPlay
+INVIN_IDX:9
+176034:click on willow logs to add to fire
+soundPlay
+179534:click on fire to add logs
+soundPlay
+180416:confirm Add to fire.
+soundPlay
+INVIN_IDX:10
+180851:click on willow logs to add to fire
+soundPlay
+184251:click on fire to add logs
+soundPlay
+185216:confirm Add to fire.
+soundPlay
+INVIN_IDX:11
+185634:click on willow logs to add to fire
+soundPlay
+189101:click on fire to add logs
+soundPlay
+189966:confirm Add to fire.
+soundPlay
+INVIN_IDX:12
+190384:click on willow logs to add to fire
+soundPlay
+193333:click on fire to add logs
+soundPlay
+194167:confirm Add to fire.
+soundPlay
+INVIN_IDX:13
+194585:click on willow logs to add to fire
+soundPlay
+197501:click on fire to add logs
+soundPlay
+198367:confirm Add to fire.
+soundPlay
+INVIN_IDX:14
+198802:click on willow logs to add to fire
+soundPlay
+201718:click on fire to add logs
+soundPlay
+202651:confirm Add to fire.
+soundPlay
+INVIN_IDX:15
+203085:click on willow logs to add to fire
+soundPlay
+206417:click on fire to add logs
+soundPlay
+207417:confirm Add to fire.
+soundPlay
+INVIN_IDX:16
+207867:click on willow logs to add to fire
+soundPlay
+211267:click on fire to add logs
+soundPlay
+212217:confirm Add to fire.
+soundPlay
+INVIN_IDX:17
+212652:click on willow logs to add to fire
+soundPlay
+215535:click on fire to add logs
+soundPlay
+216433:confirm Add to fire.
+soundPlay
+INVIN_IDX:18
+216852:click on willow logs to add to fire
+soundPlay
+220267:click on fire to add logs
+soundPlay
+221200:confirm Add to fire.
+soundPlay
+INVIN_IDX:19
+221618:click on willow logs to add to fire
+soundPlay
+224533:click on fire to add logs
+soundPlay
+225384:confirm Add to fire.
+soundPlay
+INVIN_IDX:20
+225801:click on willow logs to add to fire
+soundPlay
+228700:click on fire to add logs
+soundPlay
+229566:confirm Add to fire.
+soundPlay
+INVIN_IDX:21
+230018:click on willow logs to add to fire
+soundPlay
+232901:click on fire to add logs
+soundPlay
+233785:confirm Add to fire.
+soundPlay
+INVIN_IDX:22
+234235:click on willow logs to add to fire
+soundPlay
+237151:click on fire to add logs
+soundPlay
+238001:confirm Add to fire.
+soundPlay
+INVIN_IDX:23
+238435:click on willow logs to add to fire
+soundPlay
+241301:click on fire to add logs
+soundPlay
+242267:confirm Add to fire.
+soundPlay
+INVIN_IDX:24
+242702:click on willow logs to add to fire
+soundPlay
+246119:click on fire to add logs
+soundPlay
+247035:confirm Add to fire.
+soundPlay
+INVIN_IDX:25
+247468:click on willow logs to add to fire
+soundPlay
+250901:click on fire to add logs
+soundPlay
+251834:confirm Add to fire.
+soundPlay
+INVIN_IDX:26
+252285:click on willow logs to add to fire
+soundPlay
+255667:click on fire to add logs
+soundPlay
+256602:confirm Add to fire.
+soundPlay
+INVIN_IDX:27
+257035:click on willow logs to add to fire
+soundPlay
+259833:click on fire to add logs
+soundPlay
+ACTION timed out. MS-expEnd=10000< MS-elapsedTime=10001
+Couldn't click fire to add logs!
+270600:Wait for last log to finish.
+WAITING...
+soundPlay
+270616:LOOP FINISHED
+0:LoopStart
+34:Try cut tree1
+soundPlay
+15420:Try cut tree2
+Can't chop Tree2
+soundPlay
+15469:Check if fire exists
+DUMPING DIAG-18
+INVIN_IDX:2
+15503:click on willow logs to add to fire
+NO willow log to select & burn in invin slot:3
+INVIN_IDX:3
+15540:click on willow logs to add to fire
+NO willow log to select & burn in invin slot:4
+INVIN_IDX:4
+15573:click on willow logs to add to fire
+NO willow log to select & burn in invin slot:5
+INVIN_IDX:5
+15610:click on willow logs to add to fire
+NO willow log to select & burn in invin slot:6
+INVIN_IDX:6
+15641:click on willow logs to add to fire
+NO willow log to select & burn in invin slot:7
+INVIN_IDX:7
+15674:click on willow logs to add to fire
+NO willow log to select & burn in invin slot:8
+INVIN_IDX:8
+15707:click on willow logs to add to fire
+NO willow log to select & burn in invin slot:9
+INVIN_IDX:9
+15739:click on willow logs to add to fire
+NO willow log to select & burn in invin slot:10
+INVIN_IDX:10
+15773:click on willow logs to add to fire
+NO willow log to select & burn in invin slot:11
+INVIN_IDX:11
+15807:click on willow logs to add to fire
+NO willow log to select & burn in invin slot:12
+INVIN_IDX:12
+15841:click on willow logs to add to fire
+NO willow log to select & burn in invin slot:13
+INVIN_IDX:13
+15874:click on willow logs to add to fire
+NO willow log to select & burn in invin slot:14
+INVIN_IDX:14
+15906:click on willow logs to add to fire
+NO willow log to select & burn in invin slot:15
+INVIN_IDX:15
+15940:click on willow logs to add to fire
+NO willow log to select & burn in invin slot:16
+INVIN_IDX:16
+15973:click on willow logs to add to fire
+NO willow log to select & burn in invin slot:17
+INVIN_IDX:17
+16007:click on willow logs to add to fire
+NO willow log to select & burn in invin slot:18
+INVIN_IDX:18
+16039:click on willow logs to add to fire
+NO willow log to select & burn in invin slot:19
+INVIN_IDX:19
+16074:click on willow logs to add to fire
+NO willow log to select & burn in invin slot:20
+INVIN_IDX:20
+16107:click on willow logs to add to fire
+NO willow log to select & burn in invin slot:21
+INVIN_IDX:21
+16140:click on willow logs to add to fire
+NO willow log to select & burn in invin slot:22
+INVIN_IDX:22
+16173:click on willow logs to add to fire
+NO willow log to select & burn in invin slot:23
+INVIN_IDX:23
+16209:click on willow logs to add to fire
+NO willow log to select & burn in invin slot:24
+INVIN_IDX:24
+16239:click on willow logs to add to fire
+NO willow log to select & burn in invin slot:25
+INVIN_IDX:25
+16275:click on willow logs to add to fire
+NO willow log to select & burn in invin slot:26
+INVIN_IDX:26
+16307:click on willow logs to add to fire
+NO willow log to select & burn in invin slot:27
+INVIN_IDX:27
+16341:click on willow logs to add to fire
+NO willow log to select & burn in invin slot:28
+16369:Wait for last log to finish.
+WAITING...

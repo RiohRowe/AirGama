@@ -10,16 +10,16 @@ import org.airrowe.game_player.script_runner.Monitorable;
 public class Actionable {
 	private static int diagCount = 1;
 	private static final int DEFAULT_MONITOR_INTERVAL_MS = 100;
-	Monitorable target;
-	Monitorable notStartIndicator;
-	Monitorable progressIndicator;
-	List<Monitorable> finishedIndicators;
-	int msMonitorInterval;
-	int msExpectedStart;
-	int msExpectedEnd;
-	boolean hardStop;
-	Action interactionType;
-	Actionable nextAction;
+	public Monitorable target;
+	public Monitorable notStartIndicator;
+	public Monitorable progressIndicator;
+	public List<Monitorable> finishedIndicators;
+	public int msMonitorInterval;
+	public int msExpectedStart;
+	public int msExpectedEnd;
+	public boolean hardStop;
+	public Action interactionType;
+	public Actionable nextAction;
 	
 	public Actionable(Monitorable target, Action interactionType, Monitorable notStartIndicator, Monitorable progressIndicator,
 			List<Monitorable> finishedIndicator, int msExpectedStart, int msExpectedEnd, Actionable next) {
@@ -65,10 +65,13 @@ public class Actionable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		if( this.finishedIndicators.size()==0 ) {
+			return true;
+		}
 		long timerStart = System.currentTimeMillis();
 		//loop monitors
 		dm.diagnose = diagEnabled & DiagOption.FINNISHED_MONITORS.doDiag(dm.diagTypeFlags);
-		while( !this.hardStop && (this.finishedIndicators.size()==0 || !this.checkMonitors(finishedIndicators)) ) {
+		while( !this.hardStop && ( !this.checkMonitors(finishedIndicators)) ) {
 			dm.diagnose = diagEnabled & DiagOption.PROGRESS_MONITORS.doDiag(dm.diagTypeFlags);
 			if( !this.hardStop && (this.progressIndicator == null || !this.progressIndicator.check()) ) {
 				if( (System.currentTimeMillis()-timerStart) > (long)this.msExpectedEnd ) {
