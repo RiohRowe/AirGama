@@ -26,7 +26,7 @@ public class sandbox {
 				Sound.TOCK.play();
 			}
 		}
-		Sound.BELL.play();
+		Sound.BIKE_BELL.play();
 		Mouse.get().moveMouse(1138,431);
 		for( int i=0; i<20;++i) {
 			try {
@@ -37,7 +37,7 @@ public class sandbox {
 			}
 			System.out.println(Mouse.get().getMousePosition().toString());
 		}
-		Sound.BELL.play();
+		Sound.BIKE_BELL.play();
 		
 		
 		

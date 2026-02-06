@@ -48,7 +48,7 @@ public class DirectImgLocate {
 		    }
 	//	    System.out.println("Result Sizespace=Height:"+result.rows()+" Width:"+result.cols());
 		}
-		if( !(expectToMatch ^ matchResult.score<matchThreshold) ) {
+		if( true || !(expectToMatch ^ matchResult.score<matchThreshold) ) {
 			DiagnosticsManager dm = DiagnosticsManager.get();
 		    if( DiagnosticsManager.get().diagnose && dm.numDiags > 0 ) {
 		    	System.out.println("DUMPING DIAG-"+dm.numDiags);

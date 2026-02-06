@@ -40,7 +40,7 @@ public class test {
 				Sound.TOCK.play();
 			}
 		}
-		Sound.BELL.play();
+		Sound.BIKE_BELL.play();
 		System.out.println("BUILDING");
 		WCFMScript script = new WCFMScript();
 //		script.testArea();
