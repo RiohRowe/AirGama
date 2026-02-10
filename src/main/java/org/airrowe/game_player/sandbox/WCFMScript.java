@@ -335,7 +335,7 @@ public class WCFMScript {
 		diagMonitor(this.fireMakingXpGainIndicator);
 	}
 	public void diagMonitor(Monitorable monitor) {
-		ImgManager.saveMatImgDiag(ImgManager.convertToMat(BasicScreenGrabber.get().imgTarget(monitor.getTargetArea())), "TEST_AREA_IMG");
+		ImgManager.saveMatToFile(ImgManager.bufferedImageBGRToMatBGR(BasicScreenGrabber.get().imgTarget(monitor.getTargetArea())),null, "TEST_AREA_IMG");
 		System.out.println("Check PASSES="+monitor.check());
 		monitor.traceWithMouse();
 	}

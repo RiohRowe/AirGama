@@ -78,7 +78,7 @@ public class TextReader {
 	//Uses OCR
 	private static String runOCR(Mat roi) {
 	    try {
-	        BufferedImage img = ImgManager.matToBufferedImage(roi);
+	        BufferedImage img = ImgManager.matBgrToBufferedImageBgr(roi);
 	        return tesseract.doOCR(img).trim();
 	    } catch (Exception e) {
 	        return "";

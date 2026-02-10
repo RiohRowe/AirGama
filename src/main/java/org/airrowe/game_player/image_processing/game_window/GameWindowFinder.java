@@ -33,9 +33,9 @@ public class GameWindowFinder {
 	}
 	
 	public Rectangle getGameWindowDimensions() {
-		Mat fullScreenImg = ImgManager.convertToMat(bsg.imgFullScreen());
-		MatchResult tlMatch = DirectImgLocate.findTemplateNormCoeff(fullScreenImg, List.of(TLGW_IMG), 0.8, true);
-		MatchResult brMatch = DirectImgLocate.findTemplateNormCoeff(fullScreenImg, List.of(BRGW_IMG), 0.8, true);
+		Mat fullScreenImg = ImgManager.bufferedImageBGRToMatBGR(bsg.imgFullScreen());
+		MatchResult tlMatch = DirectImgLocate.findTemplateNormCorr(fullScreenImg, List.of(TLGW_IMG), 0.8);
+		MatchResult brMatch = DirectImgLocate.findTemplateNormCorr(fullScreenImg, List.of(BRGW_IMG), 0.8);
 		if(tlMatch.score < 0.8 || brMatch.score < 0.8 ) {
 			System.out.println("GAME BOX NOT VISIBLE");
 			return null;
@@ -59,10 +59,10 @@ public class GameWindowFinder {
 				gameBB.y-this.topLeftRefImg.rows(),
 				this.topLeftRefImg.cols(),
 				this.topLeftRefImg.rows());
-		Mat expectedBRImg = ImgManager.convertToMat(bsg.imgTarget(expectedBRLoc));
-		Mat expectedTLImg = ImgManager.convertToMat(bsg.imgTarget(expectedTLLoc));
-		MatchResult tlMatch = DirectImgLocate.findTemplateNormCoeff(expectedTLImg, List.of(TLGW_IMG), 0.8, true);
-		MatchResult brMatch = DirectImgLocate.findTemplateNormCoeff(expectedBRImg, List.of(BRGW_IMG), 0.8, true);
+		Mat expectedBRImg = ImgManager.bufferedImageBGRToMatBGR(bsg.imgTarget(expectedBRLoc));
+		Mat expectedTLImg = ImgManager.bufferedImageBGRToMatBGR(bsg.imgTarget(expectedTLLoc));
+		MatchResult tlMatch = DirectImgLocate.findTemplateNormCorr(expectedTLImg, List.of(TLGW_IMG), 0.8);
+		MatchResult brMatch = DirectImgLocate.findTemplateNormCorr(expectedBRImg, List.of(BRGW_IMG), 0.8);
 		return (tlMatch.score>=.8 && brMatch.score>=.8);
 	}
 }

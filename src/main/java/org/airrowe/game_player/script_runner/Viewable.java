@@ -1,5 +1,6 @@
 package org.airrowe.game_player.script_runner;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 
@@ -23,7 +24,9 @@ public class Viewable implements Serializable{
 	public Mat getMat() {
 		if( this.cachedImg == null) {
 			try {
-				this.cachedImg = ImgManager.convertToMat(ImageIO.read(folder.getFile(fileName)));
+				this.cachedImg = this.fileName.endsWith(".bmp") ? 
+						ImgManager.bufferedImageBGRToMatBGR(ImageIO.read(folder.getFile(fileName))):
+						ImgManager.bufferedImageABGRToMatBGRA(ImageIO.read(folder.getFile(fileName)));
 			} catch (IOException e) {
 				System.out.println("Unable to find/read file:" + folder.path+fileName);
 				e.printStackTrace();
@@ -32,5 +35,16 @@ public class Viewable implements Serializable{
 		}
 		return this.cachedImg;
 	}
-	
+	public String getName() {
+		return this.fileName;
+	}
+	public boolean save(Mat mat, boolean overwrite) {
+		//Check if file exists
+		File imgFile = new File(this.folder.path+fileName);
+		if( imgFile.exists() && !overwrite) {
+			return false;
+		}
+		ImgManager.saveMatToFile(cachedImg, folder, fileName);
+		return true;
+	}
 }

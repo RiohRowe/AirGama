@@ -1,12 +1,14 @@
 package org.airrowe.game_player.image_processing;
 
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.airrowe.game_player.diag.DiagOption;
 import org.airrowe.game_player.diag.DiagnosticsManager;
 import org.airrowe.game_player.image_grabbing.ImgManager;
+import org.airrowe.game_player.script_runner.Monitorable;
 import org.airrowe.game_player.script_runner.Viewable;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
@@ -14,41 +16,67 @@ import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;import nu.pattern.OpenCV;
 
 public class DirectImgLocate {
-	private static int diagOrderIdx=1;
 	static {
 	    OpenCV.loadLocally();
 	}
-	public static MatchResult findTemplateNormCoeff(Mat source, List<Viewable> lookFors, double matchThreshold, boolean expectToMatch) {
+	public static MatchResult findMonitorTemplateNormCorr(Mat source, Monitorable monitor) {
+		return findMonitorTemplateNormCorr(source, monitor, null, null);
+	}
+	public static MatchResult findMonitorTemplateNormCorr(Mat source, Monitorable monitor, List<Viewable> lookFors, Double matchThreshold) {
 		MatchResult matchResult = null;
 		Mat template = null;
 		Mat result = null;
+        Mat mask = null;
+        Mat rawTemplate;
+        Viewable match = null;
 		for( Viewable lookFor : lookFors) {
-			template = lookFor.getMat();
-			//Get height and width of test space (grid of possible check locations)
-		    int resultCols = source.cols() - template.cols() + 1;
-		    int resultRows = source.rows() - template.rows() + 1;
-		    //Create blank Mat grid of Float(CV_32FC1) values representing every test location
-		    result = new Mat(resultRows, resultCols, CvType.CV_32FC1);
-		    //Perform NORMALIZATION_OF_COEFFICIENTS operation on every overlap of source and search image. 
-		    //Generate closeness (1=perfect match, 0=not a match) values and populate result map
-		    Imgproc.matchTemplate(
-		        source,
-		        template,
-		        result,
-		        Imgproc.TM_CCOEFF_NORMED
-		    );
-		    
-		    Core.MinMaxLocResult mmr = Core.minMaxLoc(result);
-		    //If match found, finish
-		    if( matchResult == null || matchResult.score < mmr.maxVal) {
-		    	matchResult = new MatchResult(mmr.maxLoc,template,mmr.maxVal);
-		    	if( matchResult.score >= matchThreshold) {
-		    		break;
-		    	}
-		    }
+
+	        rawTemplate = lookFor.getMat();
+
+	        // Handle alpha templates
+	        if (rawTemplate.channels() == 4) {
+	            mask = ImgManager.extractAlphaMask(rawTemplate);
+	            template = new Mat();
+	            Imgproc.cvtColor(rawTemplate, template, Imgproc.COLOR_BGRA2BGR);
+	        } else {
+	            template = rawTemplate;
+	        }
+	        //Now we have template and possible mask layer
+
+	        int resultCols = source.cols() - template.cols() + 1;
+	        int resultRows = source.rows() - template.rows() + 1;
+
+	        result = new Mat(resultRows, resultCols, CvType.CV_32FC1);
+
+	        if( mask == null ) {
+		        Imgproc.matchTemplate(
+		                source,
+		                template,
+		                result,
+		                Imgproc.TM_CCORR_NORMED
+		        );
+	        } else {
+				Imgproc.matchTemplate(
+				    source,
+				    template,
+				    result,
+				    Imgproc.TM_CCORR_NORMED,
+				    mask   // ← this is what matters
+				);
+	        }
+
+	        Core.MinMaxLocResult mmr = Core.minMaxLoc(result);
+
+	        if (matchResult == null || matchResult.score < mmr.maxVal) {
+	            matchResult = new MatchResult(mmr.maxLoc, template, mmr.maxVal);
+	            if (matchResult.score >= matchThreshold) {
+	            	match = lookFor;
+	                break;
+	            }
+	        }
 	//	    System.out.println("Result Sizespace=Height:"+result.rows()+" Width:"+result.cols());
 		}
-		if( true || !(expectToMatch ^ matchResult.score<matchThreshold) ) {
+		if( monitor.diagnose()/*!(expectToMatch ^ matchResult.score<matchThreshold)*/ ) {// If Not expected result;
 			DiagnosticsManager dm = DiagnosticsManager.get();
 		    if( DiagnosticsManager.get().diagnose && dm.numDiags > 0 ) {
 		    	System.out.println("DUMPING DIAG-"+dm.numDiags);
@@ -63,13 +91,65 @@ public class DirectImgLocate {
 		    		ImgManager.saveMatchHeatmap(result, dm.numDiags+"-h"+template.height()+"-w"+template.width()+"-match-space.bmp");
 		    	}
 		    	if(DiagOption.SEARCH_AREA.doDiag(dm.diagTypeFlags)) {
-		    		ImgManager.saveMatImgDiag(source, dm.numDiags+"-SOURCE");
+		    		Rectangle target = monitor.getTargetArea();
+		    		String fileNameOfMatch = match==null?"noTarget":match.getName();
+		    		ImgManager.saveMatToFile(source, null, dm.numDiags+fileNameOfMatch+"x-"+target.x+"y-"+target.y+"w-"+target.width+"h-"+target.height+"-SOURCE");
 		    	}
 		    	dm.numDiags--;
 		    }
-    	} else {
-    		return matchResult;
     	}
 		return matchResult;
+	}
+	
+	public static MatchResult findTemplateNormCorr(Mat source, List<Viewable> viewables, double matchThreshold) {
+		MatchResult matchResult = null;
+		Mat template = null;
+		Mat result = null;
+		for( Viewable lookFor : viewables) {
+			template = lookFor.getMat();
+	        //Now we have template and possible mask layer
+	        int resultCols = source.cols() - template.cols() + 1;
+	        int resultRows = source.rows() - template.rows() + 1;
+
+	        result = new Mat(resultRows, resultCols, CvType.CV_32FC1);
+
+	        Imgproc.matchTemplate(
+	                source,
+	                template,
+	                result,
+	                Imgproc.TM_CCORR_NORMED
+	        );
+
+	        Core.MinMaxLocResult mmr = Core.minMaxLoc(result);
+
+	        if (matchResult == null || matchResult.score < mmr.maxVal) {
+	            matchResult = new MatchResult(mmr.maxLoc, template, mmr.maxVal);
+	            if (matchResult.score >= matchThreshold) {
+	                break;
+	            }
+	        }
+		}
+		return matchResult;
+	}
+	
+	public static boolean compareMatNormCorr(Mat source, Mat compare, double matchThreshold) {
+
+		//Get height and width of test space (grid of possible check locations)
+	    int resultCols = source.cols() - compare.cols() + 1;
+	    int resultRows = source.rows() - compare.rows() + 1;
+	    //Create blank Mat grid of Float(CV_32FC1) values representing every test location
+	    System.out.println("resultCols="+resultCols+"\tresultRows="+resultRows);
+	    Mat result = new Mat(resultRows, resultCols, CvType.CV_32FC1);
+	    //Perform NORMALIZATION_OF_COEFFICIENTS operation on every overlap of source and search image. 
+	    //Generate closeness (1=perfect match, 0=not a match) values and populate result map
+	    Imgproc.matchTemplate(
+	        source,
+	        compare,
+	        result,
+	        Imgproc.TM_CCOEFF_NORMED
+	    );
+	    
+	    Core.MinMaxLocResult mmr = Core.minMaxLoc(result);
+	    return mmr.maxVal >= matchThreshold;
 	}
 }
