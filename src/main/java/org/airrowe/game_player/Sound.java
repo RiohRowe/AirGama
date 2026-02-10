@@ -31,22 +31,22 @@ public enum Sound {
 	}
 	
 	public void play() {
-		System.out.println("soundPlay");
-//		try {
-//            // Create a File object from the file path
-//            File soundFile = new File(SOUND_LOC+this.fileName);
-//            
-//            // Get an AudioInputStream from the file
-//            AudioInputStream audioIn = AudioSystem.getAudioInputStream(soundFile);
-//            
-//            // Obtain a sound clip resource
-//            Clip clip = AudioSystem.getClip();
-//            clip.open(audioIn);
-//            clip.start();
-////            Thread.sleep(clip.getMicrosecondLength() / 1000); 
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+//		System.out.println("soundPlay");
+		try {
+            // Create a File object from the file path
+            File soundFile = new File(SOUND_LOC+this.fileName);
+            
+            // Get an AudioInputStream from the file
+            AudioInputStream audioIn = AudioSystem.getAudioInputStream(soundFile);
+            
+            // Obtain a sound clip resource
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioIn);
+            clip.start();
+//            Thread.sleep(clip.getMicrosecondLength() / 1000); 
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 	}
 }

@@ -32,14 +32,14 @@ public class ImgManager {
 	    OpenCV.loadLocally();
 	}
 	private static ImgManager instance;
-	public enum ImgCategory {
-		GAME_WINDOW("GameWindowRefImgs/");
-		public String url;
-		
-		ImgCategory(String url){
-			this.url = url;
-		}
-	}
+//	public enum ImgCategory {
+//		GAME_WINDOW("GameWindowRefImgs/");
+//		public String url;
+//		
+//		ImgCategory(String url){
+//			this.url = url;
+//		}
+//	}
 	private ImgManager() {
 		
 	}
@@ -52,18 +52,18 @@ public class ImgManager {
 	
 	
 	
-	public File getResource(ImgCategory category, String imgName) {
-		String url = category==null?"":category.url;
-		try {
-			return new File(getClass().getClassLoader().getResource(url+imgName).toURI());
-		} catch (URISyntaxException e) {
-			System.out.println("Failed to read file: "+url+imgName+".");
-			e.printStackTrace();
-			return null;
-		}
-	}
+//	public File getResource(ImgCategory category, String imgName) {
+//		String url = category==null?"":category.url;
+//		try {
+//			return new File(getClass().getClassLoader().getResource(url+imgName).toURI());
+//		} catch (URISyntaxException e) {
+//			System.out.println("Failed to read file: "+url+imgName+".");
+//			e.printStackTrace();
+//			return null;
+//		}
+//	}
 	
-	public static Mat convertToMat(BufferedImage bi) {
+	public static Mat bufferedImageBGRToMatBGR(BufferedImage bi) {
 	    if (bi.getType() != BufferedImage.TYPE_3BYTE_BGR) {
 	        BufferedImage converted =
 	            new BufferedImage(bi.getWidth(), bi.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
@@ -77,7 +77,30 @@ public class ImgManager {
 	    return mat;
 	}
 	
-	public static BufferedImage matToBufferedImage(Mat mat) {
+	public static Mat bufferedImageABGRToMatBGRA(BufferedImage bi) {  
+		if (bi.getType() != BufferedImage.TYPE_4BYTE_ABGR) {
+			BufferedImage converted = new BufferedImage(bi.getWidth(), bi.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+            converted.getGraphics().drawImage(bi, 0, 0, null);
+            bi = converted;
+        }
+
+        byte[] abgr = ((DataBufferByte) bi.getRaster().getDataBuffer()).getData();
+        byte[] bgra = new byte[abgr.length];
+
+        // Convert ABGR → BGRA
+        for (int i = 0; i < abgr.length; i += 4) {
+        	bgra[i + 3] = abgr[i];
+            bgra[i] = abgr[i + 1];
+            bgra[i + 1] = abgr[i + 2];
+            bgra[i + 2] = abgr[i + 3];
+        }
+
+        Mat mat = new Mat(bi.getHeight(), bi.getWidth(), CvType.CV_8UC4);
+        mat.put(0, 0, bgra);
+        return mat;
+	}
+	
+	public static BufferedImage matBgrToBufferedImageBgr(Mat mat) {
 	    int type = BufferedImage.TYPE_3BYTE_BGR;
 	    byte[] data = new byte[mat.rows() * mat.cols() * (int) mat.elemSize()];
 	    mat.get(0, 0, data);
@@ -89,6 +112,54 @@ public class ImgManager {
 	    );
 	    image.getRaster().setDataElements(0, 0, mat.cols(), mat.rows(), data);
 	    return image;
+	}
+
+	
+//	public static BufferedImage rgbaMatToBufferedImage(Mat mat) {
+//	    int width = mat.cols();
+//	    int height = mat.rows();
+//
+//	    byte[] bgra = new byte[width * height * 4];
+//	    mat.get(0, 0, bgra);
+//
+//	    byte[] abgr = new byte[bgra.length];
+//
+//	    for (int i = 0; i < bgra.length; i += 4) {
+//	    	abgr[i + 1] = bgra[i];
+//	    	abgr[i + 2] = bgra[i + 1];
+//	        abgr[i + 3] = bgra[i + 2];
+//	        abgr[i] = bgra[i + 3];
+//	    }
+//
+//	    BufferedImage image = new BufferedImage(
+//	        width,
+//	        height,
+//	        BufferedImage.TYPE_4BYTE_ABGR
+//	    );
+//
+//	    image.getRaster().setDataElements(0, 0, width, height, abgr);
+//	    return image;
+//	}
+	
+	public static Mat extractAlphaMask(Mat mat) {
+		    List<Mat> channels = new ArrayList<>(4);
+		    Core.split(mat, channels);
+
+		   	return channels.get(3);
+	}
+	
+	
+	public static void saveMatToFile(
+	        Mat source,
+	        ResourceFolder resourceFolder,
+	        String fileName
+	) {
+	    String directoryPath = resourceFolder == null ? ResourceFolder.WUPSIES.path : resourceFolder.path;
+	    // 1️⃣ Save reference image
+	    Imgcodecs.imwrite(
+	        directoryPath + fileName+(source.channels()==4 ? ".png" : ".bmp"),
+	        source
+	    );
 	}
 	
 	public static void saveMatchHeatmap(Mat matchResult, String fileName) {
@@ -118,24 +189,49 @@ public class ImgManager {
 
 	    System.out.println("Saved heatmap to: " + outputPath.toAbsolutePath());
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	public static void saveBlobAsBmp(//Text Recognition stuff
+            Mat blob,
+            int width,
+            int height,
+            String outputName
+    ) {
+        // Step 1: Remove batch dimension
+        // blob: [1, 3, H, W] → [3, H, W]
+    	List<Mat> images = new ArrayList<>();
+    	Dnn.imagesFromBlob(blob, images);
+    	Mat image = images.get(0);
+//        Mat reshaped = blob.reshape(1, new int[]{3, height, width});
+//
+//        // Step 2: Split into channels
+//        List<Mat> channels = new ArrayList<>(3);
+//        for (int c = 0; c < 3; c++) {
+//            Mat channel = reshaped.row(c).reshape(1, height);
+//            channels.add(channel);
+//        }
+//
+//        // Step 3: Merge channels into HxWx3
+//        Mat image = new Mat();
+//        Core.merge(channels, image);
+
+        // Step 4: Undo mean subtraction (must match blobFromImage)
+        Core.add(
+            image,
+            new Scalar(123.68, 116.78, 103.94),
+            image
+        );
+
+        // Step 5: Convert to 8-bit image
+        Mat output8u = new Mat();
+        image.convertTo(output8u, CvType.CV_8UC3);
+
+        // Step 6: Save
+        String path = "src/main/resources/" + outputName;
+        Imgcodecs.imwrite(path, output8u);
+
+        // Cleanup
+        image.release();
+        output8u.release();
+    }
 	 public static void saveTextRegionOverlay(
 	            Mat source,
 	            List<Rect> textRects,
@@ -162,49 +258,7 @@ public class ImgManager {
         overlay.release();
     }
 	 
-	    public static void saveBlobAsBmp(
-	            Mat blob,
-	            int width,
-	            int height,
-	            String outputName
-	    ) {
-	        // Step 1: Remove batch dimension
-	        // blob: [1, 3, H, W] → [3, H, W]
-	    	List<Mat> images = new ArrayList<>();
-	    	Dnn.imagesFromBlob(blob, images);
-	    	Mat image = images.get(0);
-//	        Mat reshaped = blob.reshape(1, new int[]{3, height, width});
-//
-//	        // Step 2: Split into channels
-//	        List<Mat> channels = new ArrayList<>(3);
-//	        for (int c = 0; c < 3; c++) {
-//	            Mat channel = reshaped.row(c).reshape(1, height);
-//	            channels.add(channel);
-//	        }
-//
-//	        // Step 3: Merge channels into HxWx3
-//	        Mat image = new Mat();
-//	        Core.merge(channels, image);
-
-	        // Step 4: Undo mean subtraction (must match blobFromImage)
-	        Core.add(
-	            image,
-	            new Scalar(123.68, 116.78, 103.94),
-	            image
-	        );
-
-	        // Step 5: Convert to 8-bit image
-	        Mat output8u = new Mat();
-	        image.convertTo(output8u, CvType.CV_8UC3);
-
-	        // Step 6: Save
-	        String path = "src/main/resources/" + outputName;
-	        Imgcodecs.imwrite(path, output8u);
-
-	        // Cleanup
-	        image.release();
-	        output8u.release();
-	    }
+	    
 	
 	public static void dumpMatchDiagnostics(
 	        Mat source,
@@ -243,13 +297,15 @@ public class ImgManager {
 
 	    if( DiagOption.BEST3MATCH.doDiag(dm.diagTypeFlags)) {
 		    // 4️⃣ Save best 3
-		    saveSamples(dm.numDiags+"-BEST", points.subList(0, 3), source, refW, refH, baseDir);
+	    	int numSamples = points.size()<3 ? points.size() : 3;
+		    saveSamples(dm.numDiags+"-BEST", points.subList(0, numSamples), source, refW, refH, baseDir);
 	    }
 	    if( DiagOption.WORST3MATCH.doDiag(dm.diagTypeFlags)) {
 	    // 5️⃣ Save worst 3
+	    	int numSamples = points.size()<3 ? points.size() : 3;
 		    saveSamples(
 		    		dm.numDiags+"WORST",
-		        points.subList(points.size() - 3, points.size()),
+		        points.subList(points.size() - numSamples, points.size()),
 		        source,
 		        refW,
 		        refH,
@@ -281,20 +337,7 @@ public class ImgManager {
 		    );
 	    }
 	}
-	
-	public static void saveMatImgDiag(
-	        Mat source,
-	        String fileName
-	) {
-	    String wupsiesPath = ResourceFolder.WUPSIES.path;
-	    Path baseDir = Paths.get(wupsiesPath.substring(0, wupsiesPath.length()-1));
 
-	    // 1️⃣ Save reference image
-	    Imgcodecs.imwrite(
-	        baseDir.resolve(fileName+".bmp").toString(),
-	        source
-	    );
-	}
 	
 	private static class MatchPoint {
 	    int x, y;

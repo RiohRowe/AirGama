@@ -48,9 +48,6 @@ public class Actionable {
 	}
 	public boolean doActionable(){
 		//Check if action is valid
-		DiagnosticsManager dm = DiagnosticsManager.get();
-		boolean diagEnabled = dm.diagnose;
-		dm.diagnose = diagEnabled & DiagOption.TARGET_MONITORS.doDiag(dm.diagTypeFlags);
 		if(this.target == null || this.target.check()) {
 			//do action
 			this.doAction();
@@ -70,9 +67,7 @@ public class Actionable {
 		}
 		long timerStart = System.currentTimeMillis();
 		//loop monitors
-		dm.diagnose = diagEnabled & DiagOption.FINNISHED_MONITORS.doDiag(dm.diagTypeFlags);
 		while( !this.hardStop && ( !this.checkMonitors(finishedIndicators)) ) {
-			dm.diagnose = diagEnabled & DiagOption.PROGRESS_MONITORS.doDiag(dm.diagTypeFlags);
 			if( !this.hardStop && (this.progressIndicator == null || !this.progressIndicator.check()) ) {
 				if( (System.currentTimeMillis()-timerStart) > (long)this.msExpectedEnd ) {
 				   //If action failed, break and return false
@@ -90,7 +85,6 @@ public class Actionable {
 		// When finished, try next action
 		//TODO DO ACTION LOGIC
 		  //
-		dm.diagnose = diagEnabled;
 		if( this.nextAction == null) {
 			return true;
 		}
