@@ -1,45 +1,29 @@
 package org.airrowe.game_player.sandbox;
+import java.util.Map;
 
-import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
-
-import org.airrowe.game_player.Sound;
-import org.airrowe.game_player.image_grabbing.BasicScreenGrabber;
-import org.airrowe.game_player.image_grabbing.ImgManager;
-import org.airrowe.game_player.input_emulation.Mouse;
-import org.opencv.core.Mat;
+import org.airrowe.game_player.file_management.ResourceFolder;
+import org.airrowe.game_player.script_runner.viewables.ViewableGroup;
+import org.airrowe.game_player.script_runner.viewables.ViewableManager;
 
 public class sandbox {
 	public static void main(String[] args) {
-		System.out.println("WAITING");
-		for( int i=5; i>=0; --i) {
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				System.out.println("SLEEP FAILED");
-				e.printStackTrace();
-			}
-			System.out.println(i);
-			if(i%2==0) {
-				Sound.TICK.play();
-			} else {
-				Sound.TOCK.play();
+		ViewableManager vm = ViewableManager.get();
+//		ViewableGroup BR = vm.getViewableGroups()
+//				.get(ResourceFolder.GAME_WINDOW_REF_IMGS)
+//				.get("windowBoundary/bottomRight")
+//				.get("bottomRight");
+////		TL.assimilateExistingFile("topLeft-0.bmp");
+//		BR.assimilateExistingFile("bottomRight-0.bmp");
+		Map<ResourceFolder, Map<String, Map<String, ViewableGroup>>> groups = vm.getViewableGroups();
+		for( ResourceFolder rf : groups.keySet() ) {
+			Map<String, Map<String, ViewableGroup>> vgmm = groups.get(rf);
+			for( String sd : vgmm.keySet() ) {
+				Map<String, ViewableGroup> vgm = vgmm.get(sd);
+				for( String bn : vgm.keySet() ) {
+					System.out.println(rf+" "+sd+" "+bn);
+				}
 			}
 		}
-		Sound.BIKE_BELL.play();
-		Mouse.get().moveMouse(1138,431);
-		for( int i=0; i<20;++i) {
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			System.out.println(Mouse.get().getMousePosition().toString());
-		}
-		Sound.BIKE_BELL.play();
-		
-		
-		
+		ViewableManager.saveInstance();
 	}
 }

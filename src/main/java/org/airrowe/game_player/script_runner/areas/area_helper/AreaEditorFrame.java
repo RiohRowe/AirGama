@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 
-import org.airrowe.game_player.ResourceFolder;
+import org.airrowe.game_player.file_management.ResourceFolder;
 
 public class AreaEditorFrame extends JFrame {
     public AreaEditorFrame() throws IOException {

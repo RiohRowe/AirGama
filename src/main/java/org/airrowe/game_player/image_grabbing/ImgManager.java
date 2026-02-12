@@ -13,9 +13,9 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import org.airrowe.game_player.ResourceFolder;
 import org.airrowe.game_player.diag.DiagOption;
 import org.airrowe.game_player.diag.DiagnosticsManager;
+import org.airrowe.game_player.file_management.ResourceFolder;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
@@ -155,9 +155,14 @@ public class ImgManager {
 	        String fileName
 	) {
 	    String directoryPath = resourceFolder == null ? ResourceFolder.WUPSIES.path : resourceFolder.path;
-	    // 1️⃣ Save reference image
+	    saveMatToFile(source,directoryPath+fileName);
+	}
+	public static void saveMatToFile(
+	        Mat source,
+	        String fileFullPath
+	) {
 	    Imgcodecs.imwrite(
-	        directoryPath + fileName+(source.channels()==4 ? ".png" : ".bmp"),
+	        fileFullPath,
 	        source
 	    );
 	}

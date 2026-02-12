@@ -2,14 +2,14 @@ package org.airrowe.game_player.image_processing;
 
 import java.util.List;
 
+import org.airrowe.game_player.file_management.ResourceFolder;
+import org.airrowe.game_player.script_runner.viewables.ViewableGroup;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
-
-import org.airrowe.game_player.ResourceFolder;
 
 public class ImgAnalyser {
 
@@ -71,8 +71,8 @@ public class ImgAnalyser {
         return baseBGRA;
     }
 
-    public static void saveAsPNG(Mat bgra, String fileName) {
-    	
-        Imgcodecs.imwrite(ResourceFolder.WUPSIES.path+fileName+".png", bgra);
+    public static void saveAsPNG(Mat bgra, ViewableGroup group) {
+    	group.addViewable(bgra);
+//        Imgcodecs.imwrite(ResourceFolder.WUPSIES.path+fileName+".png", bgra);
     }
 }

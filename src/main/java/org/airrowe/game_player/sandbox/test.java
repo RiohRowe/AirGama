@@ -2,9 +2,9 @@ package org.airrowe.game_player.sandbox;
 
 import java.awt.Rectangle;
 
-import org.airrowe.game_player.Sound;
 import org.airrowe.game_player.diag.DiagOption;
 import org.airrowe.game_player.diag.DiagnosticsManager;
+import org.airrowe.game_player.file_management.Sound;
 
 public class test {
 	public static void printRectangle(Rectangle rec) {

@@ -7,12 +7,12 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.List;
 
-import org.airrowe.game_player.ResourceFolder;
+import org.airrowe.game_player.file_management.ResourceFolder;
 import org.airrowe.game_player.image_processing.DirectImgLocate;
 import org.airrowe.game_player.image_processing.MatchResult;
 import org.airrowe.game_player.script_runner.Monitorable;
-import org.airrowe.game_player.script_runner.Viewable;
 import org.airrowe.game_player.script_runner.areas.Area;
+import org.airrowe.game_player.script_runner.viewables.Viewable;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -3,7 +3,9 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
+import org.airrowe.game_player.file_management.ResourceFolder;
 import org.airrowe.game_player.image_grabbing.BasicScreenGrabber;
 import org.airrowe.game_player.image_grabbing.ImgManager;
 import org.airrowe.game_player.image_processing.DirectImgLocate;
@@ -11,19 +13,22 @@ import org.airrowe.game_player.image_processing.ImgAnalyser;
 import org.airrowe.game_player.image_processing.MatchResult;
 import org.airrowe.game_player.input_emulation.Mouse;
 import org.airrowe.game_player.script_runner.areas.Area;
+import org.airrowe.game_player.script_runner.areas.GameWArea;
+import org.airrowe.game_player.script_runner.viewables.Viewable;
+import org.airrowe.game_player.script_runner.viewables.ViewableGroup;
 import org.opencv.core.Mat;
 
 public class Monitorable {
 	private static final Double DEFAULT_MATCH_THRESHOLD = 0.9999;
 	private BasicScreenGrabber bsg;
 	private Area area;
-	private List<Viewable> imgRefs;
+	private ViewableGroup imgRefs;
 	private boolean expectMatch;
 	private double matchThreshold;
 	private Point lastPoint;
 	private boolean diagnose;
 	
-	public Monitorable( Area area, List<Viewable> imgRefs, boolean expectMatch, Double matchThreshold) {
+	public Monitorable( Area area, ViewableGroup imgRefs, boolean expectMatch, Double matchThreshold) {
 		this.bsg = BasicScreenGrabber.get();
 		this.area = area;
 		this.imgRefs = imgRefs;
@@ -32,24 +37,21 @@ public class Monitorable {
 		this.diagnose = false;
 //		this.lastPoint=area.center;
 	}
-	public Mat getFirstRefImg() {
-		return this.imgRefs.get(0).getMat();
-	}
 	public String getName() {
-		return this.imgRefs.get(0).fileName;
+		return this.imgRefs.getBaseName();
 	}
-	public List<Viewable> getImgRefs(){
-		return this.imgRefs;
+	public Set<Viewable> getImgRefs(){
+		return this.imgRefs.getViewables();
 	}
 	public boolean check() {
 		return this.check(null,null,null);
 	}
-	public boolean check(List<Viewable> altViewables, Boolean altPassIfMatch, Double altMatchThreshold) {
-		if ( this.imgRefs.size()==0 ) {
+	public boolean check(ViewableGroup altViewables, Boolean altPassIfMatch, Double altMatchThreshold) {
+		if ( this.imgRefs == null ) {
 			this.lastPoint = this.area.center;
 			return true;
 		}
-		List<Viewable> viewables = altViewables==null ? this.imgRefs : altViewables;
+		ViewableGroup viewables = altViewables==null ? this.imgRefs : altViewables;
 		boolean passIfMatch = altPassIfMatch==null ? this.expectMatch : altPassIfMatch;
 		double thresholdForMatch = altMatchThreshold==null ? this.matchThreshold : altMatchThreshold;
 		
@@ -88,16 +90,30 @@ public class Monitorable {
 			}
 		}
 	}
-	public void recordArea(long msRecTime, long msSampleInterval) {
-		//getName
-		String baseFileName = this.imgRefs.size()==0?"PLACEHOLDER_NAME-":this.imgRefs.get(0).fileName;
-		List<Mat> distinctImgs = new ArrayList<Mat>();
-		System.out.println("num Viewables="+this.imgRefs.size());
-		for( Viewable existing : this.imgRefs ) {
-			distinctImgs.add(existing.getMat());
+	public boolean recordArea(long msRecTime, long msSampleInterval, boolean alphaImg) {
+		//create new viewableGroup if it doesn't yet exist.
+		if( this.imgRefs == null) {
+			//Get root
+			Area area = this.area;
+			while( area.getParent() != null ) {
+				area = area.getParent();
+			}
+			if( area.getClass() == GameWArea.class ) {
+				GameWArea gwa = (GameWArea) area;
+				this.imgRefs = new ViewableGroup(
+						ResourceFolder.GAME_WORLD_REF_IMGS, 
+						new String[] {gwa.getActivity(), gwa.getPosition()},
+						gwa.getTarget());//Use area name
+			} else {
+				System.out.println("Could not record Area. No Viewable group, and could not make one. Area root is of type "+area.getClass()+" instead of "+GameWArea.class);
+				return false;
+			}
 		}
-		if( this.imgRefs.size()==1 && baseFileName.charAt(baseFileName.length()-2)!='-') {
-			baseFileName = baseFileName+'-';
+		 
+		List<Mat> distinctImgs = new ArrayList<Mat>();
+		System.out.println("num Viewables="+this.imgRefs.getViewables().size());
+		for( Viewable existing : this.imgRefs.getViewables() ) {
+			distinctImgs.add(existing.getMat());
 		}
 		
 		long startTimeMs = System.currentTimeMillis();
@@ -127,10 +143,14 @@ public class Monitorable {
 			
 		}
 		//save imgs.
-		ImgAnalyser.saveAsPNG(ImgAnalyser.findIdenticalPixlesInMatStackAsAlphaMat(distinctImgs), baseFileName);
-//		for(int i=this.imgRefs.size(); i<distinctImgs.size(); ++i) {
-//			ImgManager.saveMatImgDiag(distinctImgs.get(i), baseFileName+(i+1));
-//		}
+		if( alphaImg ) {
+			this.imgRefs.addViewable(ImgAnalyser.findIdenticalPixlesInMatStackAsAlphaMat(distinctImgs));
+		}else {
+			for(int i=this.imgRefs.getViewables().size(); i<distinctImgs.size(); ++i) {
+				this.imgRefs.addViewable(distinctImgs.get(i));
+			}
+		}
+		return true;
 	}
 	public void startDiagnostic() {
 		this.diagnose = true;

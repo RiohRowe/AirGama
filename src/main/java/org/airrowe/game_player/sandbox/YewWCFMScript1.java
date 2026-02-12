@@ -4,21 +4,21 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.airrowe.game_player.ResourceFolder;
-import org.airrowe.game_player.Sound;
 import org.airrowe.game_player.diag.DiagnosticsManager;
+import org.airrowe.game_player.file_management.ResourceFolder;
+import org.airrowe.game_player.file_management.Sound;
 import org.airrowe.game_player.image_grabbing.BasicScreenGrabber;
 import org.airrowe.game_player.image_grabbing.GameWindow;
 import org.airrowe.game_player.image_grabbing.ImgManager;
 import org.airrowe.game_player.input_emulation.Mouse;
 import org.airrowe.game_player.script_runner.Monitorable;
-import org.airrowe.game_player.script_runner.Viewable;
 import org.airrowe.game_player.script_runner.actions.Action;
 import org.airrowe.game_player.script_runner.actions.MouseActionable;
 import org.airrowe.game_player.script_runner.actions.WaitActionable;
 import org.airrowe.game_player.script_runner.areas.Area;
 import org.airrowe.game_player.script_runner.areas.AreaManager;
 import org.airrowe.game_player.script_runner.areas.GameWArea;
+import org.airrowe.game_player.script_runner.viewables.Viewable;
 
 public class YewWCFMScript1 {
 	private Viewable yewLog_invin_img;

@@ -3,7 +3,7 @@ package org.airrowe.game_player.script_runner.actions;
 import java.awt.Point;
 import java.util.List;
 
-import org.airrowe.game_player.Sound;
+import org.airrowe.game_player.file_management.Sound;
 import org.airrowe.game_player.input_emulation.Mouse;
 import org.airrowe.game_player.script_runner.Monitorable;
 
